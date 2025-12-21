@@ -236,6 +236,10 @@ namespace MusicPlayer
 
         private void SetupDataGridView()
         {
+            //允许多选
+            dataGridViewPlayList.MultiSelect = true;
+            dataGridViewPlayList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
             //基础样式
             dataGridViewPlayList.BackgroundColor = Color.FromArgb(18, 18, 18);//深色背景
             dataGridViewPlayList.BorderStyle = BorderStyle.None;//移除外边框
