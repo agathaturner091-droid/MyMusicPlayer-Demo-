@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "dgSpecHash": "1BTaef9xHiM=",
+  "success": true,
+  "projectFilePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Kira\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\stub.system.data.sqlite.core.netframework\\1.0.119\\stub.system.data.sqlite.core.netframework.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.componentmodel.annotations\\4.7.0\\system.componentmodel.annotations.4.7.0.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.data.sqlclient\\4.8.1\\system.data.sqlclient.4.8.1.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.data.sqlite.ef6\\1.0.119\\system.data.sqlite.ef6.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.data.sqlite.linq\\1.0.119\\system.data.sqlite.linq.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\system.data.sqlite.x64\\1.0.119\\system.data.sqlite.x64.1.0.119.nupkg.sha512",
+    "C:\\Users\\Kira\\.nuget\\packages\\taglibsharp\\2.3.0\\taglibsharp.2.3.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "包 \"System.Data.SqlClient\" 4.8.1 具有已知的 中 严重性漏洞，https://github.com/advisories/GHSA-8g2p-5pqh-5jmc",
+      "projectPath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "libraryId": "System.Data.SqlClient",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "包 \"System.Data.SqlClient\" 4.8.1 具有已知的 高 严重性漏洞，https://github.com/advisories/GHSA-98g6-xh36-x2p7",
+      "projectPath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "libraryId": "System.Data.SqlClient",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net10.0-windows7.0”还原包“Stub.System.Data.SQLite.Core.NetFramework 1.0.119”。此包可能与项目不完全兼容。",
+      "projectPath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "libraryId": "Stub.System.Data.SQLite.Core.NetFramework",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net10.0-windows7.0”还原包“System.Data.SQLite.Linq 1.0.119”。此包可能与项目不完全兼容。",
+      "projectPath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "libraryId": "System.Data.SQLite.Linq",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net10.0-windows7.0”还原包“System.Data.SQLite.x64 1.0.119”。此包可能与项目不完全兼容。",
+      "projectPath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Users\\Kira\\source\\repos\\MusicPlayer\\MusicPlayer\\MusicPlayer.csproj",
+      "libraryId": "System.Data.SQLite.x64",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    }
+  ]
+}

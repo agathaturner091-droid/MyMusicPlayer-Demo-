@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>MusicPlayer</id>
+    <version>1.0.0</version>
+    <authors>MusicPlayer</authors>
+    <description>Package Description</description>
+    <repository type="git" />
+    <dependencies>
+      <group targetFramework="net10.0-windows7.0">
+        <dependency id="Stub.System.Data.SQLite.Core.NetFramework" version="1.0.119" exclude="Build,Analyzers" />
+        <dependency id="System.Data.SQLite.Core" version="1.0.119" exclude="Build,Analyzers" />
+        <dependency id="System.Data.SQLite.x64" version="1.0.119" exclude="Build,Analyzers" />
+        <dependency id="TagLibSharp" version="2.3.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net10.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WindowsForms" />
+      </group>
+    </frameworkReferences>
+    <contentFiles>
+      <files include="any/net10.0-windows7.0/favicon.ico" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="D:\Users\Kira\source\repos\MusicPlayer\MusicPlayer\bin\x86\Debug\net10.0-windows\MusicPlayer.runtimeconfig.json" target="lib\net10.0-windows7.0\MusicPlayer.runtimeconfig.json" />
+    <file src="D:\Users\Kira\source\repos\MusicPlayer\MusicPlayer\bin\x86\Debug\net10.0-windows\MusicPlayer.dll" target="lib\net10.0-windows7.0\MusicPlayer.dll" />
+    <file src="D:\Users\Kira\source\repos\MusicPlayer\MusicPlayer\favicon.ico" target="content\favicon.ico" />
+    <file src="D:\Users\Kira\source\repos\MusicPlayer\MusicPlayer\favicon.ico" target="contentFiles\any\net10.0-windows7.0\favicon.ico" />
+  </files>
+</package>
