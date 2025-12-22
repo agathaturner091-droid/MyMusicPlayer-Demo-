@@ -805,6 +805,26 @@ namespace MusicPlayer
                 contextMenu.Show();
             }
         }
+
+        //接受并显示歌单内容
+        public void LoadPlaylistToGrid(string playlistName, List<string> paths)
+        {
+            dataGridViewPlayList.Rows.Clear();
+
+            // 如果歌单为空，可以提示或显示空界面
+            if (paths == null || paths.Count == 0) return;
+
+            // 显示 Grid 隐藏欢迎文字
+            dataGridViewPlayList.Visible = true;
+            labelAdd.Visible = false;
+            labelSearch.Visible = false;
+
+            int count = 1;
+            foreach (var file in paths)
+            {
+                if (!System.IO.File.Exists(file)) continue;
+            }
+        }
     }
     //音乐信息
     public class MusicInfo

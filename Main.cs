@@ -9,6 +9,8 @@ namespace MusicPlayer
 {
     public partial class Main : Form
     {
+        private OpenFiles _openFiles;
+
         public Main()
         {
             InitializeComponent();
@@ -17,12 +19,17 @@ namespace MusicPlayer
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
             //传入
-            OpenFiles of = new OpenFiles(this);
-            of.TopLevel = false;
+            _openFiles = new OpenFiles(this);
+            _openFiles.TopLevel = false;
+            _openFiles.Dock = DockStyle.Fill;
+            panelPlayListSubMenu.Controls.Add(_openFiles);
+            _openFiles.Show();
+
+            // 给 OpenFiles 的 Tag 绑定 Main，方便子窗口回调
+            _openFiles.Tag = this;
 
         }
 
-        private OpenFiles _openFilesForm;
 
         //存储歌单名和歌曲路径的对应关系
         private Dictionary<string, List<string>> playListDictionary = new Dictionary<string, List<string>>();
@@ -47,13 +54,13 @@ namespace MusicPlayer
             btnItem.FlatAppearance.BorderSize = 0;
             btnItem.TextAlign = ContentAlignment.MiddleLeft;
             btnItem.ForeColor = Color.White;
-            btnItem.Cursor = Cursor.Hand;
+            btnItem.Cursor = Cursors.Hand;
 
             //点击歌名：再OpenFiles的数据表中展示歌曲
             btnItem.Click += (s, e) =>
             {
                 //加载属于该歌单的paths
-                _openFiles.LoadPlayListToGrid(name, playListDictionary[name]);
+                _openFiles.LoadPlaylistToGrid(name, playListDictionary[name]);
             };
 
             //添加到容器
@@ -175,16 +182,16 @@ namespace MusicPlayer
 
         private void btnMedia_Click(object sender, EventArgs e)
         {
-            if (_openFilesForm == null || _openFilesForm.IsDisposed)
+            if (_openFiles == null || _openFiles.IsDisposed)
             {
-                _openFilesForm = new OpenFiles(this);
-                _openFilesForm.TopLevel = false;
-                _openFilesForm.Dock = DockStyle.Fill;
-                panelChildForm.Controls.Add(_openFilesForm);
+                _openFiles = new OpenFiles(this);
+                _openFiles.TopLevel = false;
+                _openFiles.Dock = DockStyle.Fill;
+                panelChildForm.Controls.Add(_openFiles);
             }
 
-            _openFilesForm.BringToFront();
-            _openFilesForm.Show();
+            _openFiles.BringToFront();
+            _openFiles.Show();
         }
         private void btnPlayList_Click(object sender, EventArgs e)
         {
@@ -261,6 +268,28 @@ namespace MusicPlayer
         {
             EditDetails editForm = new EditDetails(new List<string>(), _openFiles);
             editForm.ShowDialog();
+        }
+
+        public void AddNewPlaylistToUI(string name, List<string> paths)
+        {
+            Button btnPlaylist = new Button();
+            // 缩进
+            btnPlaylist.Text = "      " + name; 
+            btnPlaylist.Size = new Size(panelPlayListSubMenu.Width - 10, 30);
+            btnPlaylist.TextAlign = ContentAlignment.MiddleLeft;
+            btnPlaylist.FlatStyle = FlatStyle.Flat;
+            btnPlaylist.FlatAppearance.BorderSize = 0;
+            btnPlaylist.ForeColor = Color.White;
+            btnPlaylist.Cursor = Cursors.Hand; 
+
+            btnPlaylist.Click += (s, e) => {
+                // 调用 OpenFiles 里的方法显示歌曲
+                _openFiles.LoadPlaylistToGrid(name, paths);
+            };
+
+            panelPlayListSubMenu.Controls.Add(btnPlaylist);
+            // 自动展开显示新歌单
+            panelPlayListSubMenu.Visible = true; 
         }
     }
 }
