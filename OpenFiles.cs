@@ -817,19 +817,27 @@ namespace MusicPlayer
         //接受并显示歌单内容
         public void LoadPlaylistToGrid(string playlistName, List<string> paths)
         {
+            //无论是否有歌，先清空旧数据
             dataGridViewPlayList.Rows.Clear();
 
-            // 如果歌单为空，可以提示或显示空界面
-            if (paths == null || paths.Count == 0) return;
+            // 确保 UI 状态正确切换
+            // 必须先隐藏初始面板，再显示列表面板
+            panelBackgroundHigh.Visible = false;
+            if (panelBackgroundLow != null) panelBackgroundLow.Visible = false;
 
-            // 显示 Grid 隐藏欢迎文字
-            dataGridViewPlayList.Visible = true;
+            panelSecondBackgroundHigh.Visible = true; // 显示带有搜索条的顶部面板
+            dataGridViewPlayList.Visible = true;      // 显示表格
             labelAdd.Visible = false;
             labelSearch.Visible = false;
-            panelBackgroundHigh.Visible = false;
-            // 确保搜索条所在的面板也显示
-            panelSecondBackgroundHigh.Visible = true;
 
+            // 如果歌单为空，直接结束（此时界面已经是空的列表页了）
+            if (paths == null || paths.Count == 0)
+            {
+                this.BringToFront();
+                return;
+            }
+
+            // 填充数据
             int count = 1;
             foreach (var file in paths)
             {
@@ -852,12 +860,11 @@ namespace MusicPlayer
                 }
                 catch
                 {
-                    // 如果读取元数据失败，至少显示文件名
                     dataGridViewPlayList.Rows.Add(count++, Path.GetFileNameWithoutExtension(file), "未知专辑", "", "00:00", file);
                 }
             }
 
-            // 强制让 OpenFiles 显示到最前面
+            // 5. 强制显示
             this.BringToFront();
         }
 
@@ -872,19 +879,20 @@ namespace MusicPlayer
 
         public void ResetToAllMusic()
         {
-            //恢复 UI 状态：显示搜索和添加按钮
+            // 恢复初始 UI 状态
             labelAdd.Visible = true;
             labelSearch.Visible = true;
 
-            // 隐藏所有的背景遮罩（根据你的界面逻辑调整）
-            panelBackgroundHigh.Visible = true; // 或者是 false，看你想要什么初始状态
+            // 显示初始面板，隐藏歌单列表面板
+            panelBackgroundHigh.Visible = true;
+            panelSecondBackgroundHigh.Visible = false; 
+            if (panelBackgroundLow != null) panelBackgroundLow.Visible = true; 
 
-            // 清空表格，准备显示默认状态
+            // 隐藏并清空表格
+            dataGridViewPlayList.Visible = false;
             dataGridViewPlayList.Rows.Clear();
-            dataGridViewPlayList.Visible = false; // 初始状态下隐藏表格，显示 "添加歌曲" 的提示
 
             // 将窗体带到最前
-            this.Show();
             this.BringToFront();
         }
     }
