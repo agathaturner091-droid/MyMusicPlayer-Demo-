@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace MusicPlayer
 {
+
     public partial class RightClickMenu : Form
     {
         private List<string> _paths;
@@ -18,6 +19,30 @@ namespace MusicPlayer
             InitializeComponent();
             this._paths = paths;
             this._parent = parent;
+
+            // 参数：(目标Panel, 鼠标移入时的颜色, 默认颜色)
+            BindHoverEvents(panelShare, Color.FromArgb(60, 60, 60), Color.Transparent);
+            BindHoverEvents(panelRemove, Color.FromArgb(60, 60, 60), Color.Transparent);
+            BindHoverEvents(panelAdd, Color.FromArgb(60, 60, 60), Color.Transparent);
+        }
+
+
+
+        private void BindHoverEvents(Panel p, Color hoverColor, Color defaultColor)
+        {
+            // 定义进入逻辑
+            EventHandler enter = (s, e) => p.BackColor = hoverColor;
+            // 定义离开逻辑
+            EventHandler leave = (s, e) => p.BackColor = defaultColor;
+
+            p.MouseEnter += enter;
+            p.MouseLeave += leave; 
+
+            foreach (Control c in p.Controls)
+            {
+                c.MouseEnter += enter;
+                c.MouseLeave += leave;
+            }
         }
 
         private void btnShare_Click(object sender, EventArgs e)

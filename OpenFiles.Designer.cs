@@ -83,6 +83,7 @@
             dataGridViewPlayList.CellMouseEnter += dataGridViewPlayList_CellMouseEnter;
             dataGridViewPlayList.CellMouseLeave += dataGridViewPlayList_CellMouseLeave;
             dataGridViewPlayList.CellPainting += dataGridViewPlayList_CellPainting;
+            dataGridViewPlayList.MouseDown += dataGridViewPlayList_MouseDown;
             // 
             // panelBackgroundHigh
             // 

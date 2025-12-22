@@ -13,9 +13,10 @@ namespace MusicPlayer
         private List<string> _tempPaths;
         private OpenFiles _openFiles;
 
-        public EditDetails(List<string> paths,OpenFiles openFiles)
+        public EditDetails(List<string> paths, OpenFiles openFiles)
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterParent;
 
             this._tempPaths = paths;
             this._openFiles = openFiles;
@@ -23,7 +24,7 @@ namespace MusicPlayer
 
         private void pictureBoxSave_Click(object sender, EventArgs e)
         {
-            string newName=textBoxPlayListName.Text.Trim();
+            string newName = textBoxPlayListName.Text.Trim();
 
             if (string.IsNullOrEmpty(newName))
             {
@@ -44,6 +45,11 @@ namespace MusicPlayer
                 m?.CreateNewPlayListUI(newName, _tempPaths);
                 this.Close();
             }
+        }
+
+        private void labelClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -46,6 +46,7 @@
             pictureBoxLastSong = new PictureBox();
             pictureBoxPlay = new PictureBox();
             panelMusicSource = new Panel();
+            pictureBoxAdd = new PictureBox();
             btnHelp = new Button();
             panelToolsSubMenu = new Panel();
             btnEffectsAndFiliters = new Button();
@@ -65,7 +66,6 @@
             pictureBoxPicture = new PictureBox();
             panelChildForm = new Panel();
             pictureBoxLogoMain = new PictureBox();
-            pictureBoxAdd = new PictureBox();
             panelPlayer = new Panel();
             panelPlayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxStop).BeginInit();
@@ -82,6 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxLastSong).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlay).BeginInit();
             panelMusicSource.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).BeginInit();
             panelToolsSubMenu.SuspendLayout();
             panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).BeginInit();
@@ -90,7 +91,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxPicture).BeginInit();
             panelChildForm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogoMain).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).BeginInit();
             SuspendLayout();
             // 
             // panelPlayer
@@ -300,6 +300,17 @@
             panelMusicSource.Name = "panelMusicSource";
             panelMusicSource.Size = new Size(283, 760);
             panelMusicSource.TabIndex = 0;
+            // 
+            // pictureBoxAdd
+            // 
+            pictureBoxAdd.Image = (Image)resources.GetObject("pictureBoxAdd.Image");
+            pictureBoxAdd.Location = new Point(242, 176);
+            pictureBoxAdd.Name = "pictureBoxAdd";
+            pictureBoxAdd.Size = new Size(35, 35);
+            pictureBoxAdd.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBoxAdd.TabIndex = 2;
+            pictureBoxAdd.TabStop = false;
+            pictureBoxAdd.Click += pictureBoxAdd_Click;
             // 
             // btnHelp
             // 
@@ -572,17 +583,6 @@
             pictureBoxLogoMain.TabIndex = 0;
             pictureBoxLogoMain.TabStop = false;
             // 
-            // pictureBoxAdd
-            // 
-            pictureBoxAdd.Image = (Image)resources.GetObject("pictureBoxAdd.Image");
-            pictureBoxAdd.Location = new Point(242, 176);
-            pictureBoxAdd.Name = "pictureBoxAdd";
-            pictureBoxAdd.Size = new Size(35, 35);
-            pictureBoxAdd.SizeMode = PictureBoxSizeMode.AutoSize;
-            pictureBoxAdd.TabIndex = 2;
-            pictureBoxAdd.TabStop = false;
-            pictureBoxAdd.Click += pictureBoxAdd_Click;
-            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(10F, 23F);
@@ -617,6 +617,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlay).EndInit();
             panelMusicSource.ResumeLayout(false);
             panelMusicSource.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).EndInit();
             panelToolsSubMenu.ResumeLayout(false);
             panelLogo.ResumeLayout(false);
             panelLogo.PerformLayout();
@@ -628,7 +629,6 @@
             panelChildForm.ResumeLayout(false);
             panelChildForm.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogoMain).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).EndInit();
             ResumeLayout(false);
         }
 

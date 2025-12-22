@@ -99,6 +99,14 @@ namespace MusicPlayer
             mainForm.pictureBoxPlay.Visible = true;
             mainForm.pictureBoxStop.Visible = false;
 
+            //可取消选择
+            dataGridViewPlayList.MouseDown += (s, e) => {
+                if (dataGridViewPlayList.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.None)
+                {
+                    dataGridViewPlayList.ClearSelection();
+                }
+            };
+
             //初始化循环/随机图标状态
             RefreshModeUI();
         }
@@ -818,12 +826,62 @@ namespace MusicPlayer
             dataGridViewPlayList.Visible = true;
             labelAdd.Visible = false;
             labelSearch.Visible = false;
+            panelBackgroundHigh.Visible = false;
+            // 确保搜索条所在的面板也显示
+            panelSecondBackgroundHigh.Visible = true;
 
             int count = 1;
             foreach (var file in paths)
             {
                 if (!System.IO.File.Exists(file)) continue;
+
+                try
+                {
+                    using (var tfile = TagLib.File.Create(file))
+                    {
+                        var artists = string.Join(",", tfile.Tag.Performers);
+                        if (string.IsNullOrEmpty(artists)) artists = "未知歌手";
+                        string songTitle = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(file);
+                        string combinedTitle = $"{songTitle}-{artists}";
+                        string album = tfile.Tag.Album ?? "未知专辑";
+                        string durationStr = tfile.Properties.Duration.ToString(@"mm\:ss");
+                        string dataAdded = new FileInfo(file).CreationTime.ToString("yyyy-MM-dd");
+
+                        dataGridViewPlayList.Rows.Add(count++, combinedTitle, album, dataAdded, durationStr, file);
+                    }
+                }
+                catch
+                {
+                    // 如果读取元数据失败，至少显示文件名
+                    dataGridViewPlayList.Rows.Add(count++, Path.GetFileNameWithoutExtension(file), "未知专辑", "", "00:00", file);
+                }
             }
+
+            // 强制让 OpenFiles 显示到最前面
+            this.BringToFront();
+        }
+
+        private void dataGridViewPlayList_MouseDown(object sender, MouseEventArgs e)
+        {
+            // 如果点击的是 DataGridView 的空白处（没有行的地方）
+            if (dataGridViewPlayList.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.None)
+            {
+                dataGridViewPlayList.ClearSelection();
+            }
+        }
+
+        public void ResetToAllMusic()
+        {
+            // 恢复 UI 状态：显示搜索图标和添加图标
+            labelAdd.Visible = true;
+            labelSearch.Visible = true;
+            panelBackgroundHigh.Visible = true;
+
+            // 清空当前列表（如果你有保存原始路径列表，可以在这里重新加载）
+            dataGridViewPlayList.Rows.Clear();
+
+            // 将窗体带到最前
+            this.BringToFront();
         }
     }
     //音乐信息

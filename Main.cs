@@ -11,6 +11,8 @@ namespace MusicPlayer
     {
         private OpenFiles _openFiles;
 
+        private List<string> allLocalPaths = new List<string>();
+
         public Main()
         {
             InitializeComponent();
@@ -18,16 +20,18 @@ namespace MusicPlayer
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
-            //传入
+            //初始化窗体
             _openFiles = new OpenFiles(this);
             _openFiles.TopLevel = false;
+            _openFiles.FormBorderStyle = FormBorderStyle.None;
             _openFiles.Dock = DockStyle.Fill;
-            panelPlayListSubMenu.Controls.Add(_openFiles);
-            _openFiles.Show();
 
-            // 给 OpenFiles 的 Tag 绑定 Main，方便子窗口回调
-            _openFiles.Tag = this;
+            // 将它放入主显示面板
+            panelChildForm.Controls.Add(_openFiles);
 
+            // 默认显示
+            panelChildForm.Show();
+            panelChildForm.BringToFront();
         }
 
 
@@ -49,7 +53,7 @@ namespace MusicPlayer
             //创建子菜单按钮
             Button btnItem=new Button();
             btnItem.Text = "      " + name;
-            btnItem.Size = new Size(panelPlayListSubMenu.Width - 5, 35);
+            btnItem.Size = new Size(panelPlayListSubMenu.Width - 5, 45);
             btnItem.FlatStyle=FlatStyle.Flat;
             btnItem.FlatAppearance.BorderSize = 0;
             btnItem.TextAlign = ContentAlignment.MiddleLeft;
@@ -163,6 +167,8 @@ namespace MusicPlayer
         private void CustomizeDesing()
         {
             panelToolsSubMenu.Visible = false;
+            // 强制关闭歌单子菜单
+            panelPlayListSubMenu.Visible = false;
         }
         private void HideSubMenu()
         {
@@ -182,20 +188,19 @@ namespace MusicPlayer
 
         private void btnMedia_Click(object sender, EventArgs e)
         {
-            if (_openFiles == null || _openFiles.IsDisposed)
-            {
-                _openFiles = new OpenFiles(this);
-                _openFiles.TopLevel = false;
-                _openFiles.Dock = DockStyle.Fill;
-                panelChildForm.Controls.Add(_openFiles);
-            }
-
-            _openFiles.BringToFront();
             _openFiles.Show();
+            _openFiles.BringToFront();
+
+            // 调用重置方法，让它从歌单模式切回普通模式
+            _openFiles.ResetToAllMusic();
         }
+
         private void btnPlayList_Click(object sender, EventArgs e)
         {
-            panelPlayListSubMenu.Visible = !panelPlayListSubMenu.Visible;
+            if (panelPlayListSubMenu.Controls.Count > 0)
+            {
+                panelPlayListSubMenu.Visible = !panelPlayListSubMenu.Visible;
+            }
         }
         private void btnEqualizer_Click(object sender, EventArgs e)
         {
@@ -266,6 +271,8 @@ namespace MusicPlayer
 
         private void pictureBoxAdd_Click(object sender, EventArgs e)
         {
+            // 传入一个全新的空列表 new List<string>()
+            // 这样 EditDetails 内部判断路径数 = 0，就会进入“新建空歌单”模式
             EditDetails editForm = new EditDetails(new List<string>(), _openFiles);
             editForm.ShowDialog();
         }
@@ -284,12 +291,63 @@ namespace MusicPlayer
 
             btnPlaylist.Click += (s, e) => {
                 // 调用 OpenFiles 里的方法显示歌曲
+                if (!panelChildForm.Controls.Contains(_openFiles))
+                {
+                    panelChildForm.Controls.Add(_openFiles);
+                }
+                // 显示窗体并置顶
+                _openFiles.Show();
+                _openFiles.BringToFront();
+
+                //加载该歌单的数据
                 _openFiles.LoadPlaylistToGrid(name, paths);
             };
 
             panelPlayListSubMenu.Controls.Add(btnPlaylist);
             // 自动展开显示新歌单
             panelPlayListSubMenu.Visible = true; 
+        }
+
+        public void RefreshPlaylists()
+        {
+            // 清空旧按钮
+            panelPlayListSubMenu.Controls.Clear();
+
+            // 从数据库获取所有歌单名称 (假设你使用的是 SQLiteHelper)
+            List<string> playlists = SQLiteStudio.GetPlaylists();
+
+            int buttonHeight = 40; // 每个歌单按钮的高度
+
+            // 3. 动态调整子菜单高度
+            // 如果没有歌单，高度为0；如果有，高度 = 数量 * 40
+            panelPlayListSubMenu.Height = playlists.Count * buttonHeight;
+
+            // 4. 倒序添加（保证显示顺序）
+            for (int i = playlists.Count - 1; i >= 0; i--)
+            {
+                Button btn = new Button();
+                btn.Text = playlists[i];
+                btn.Dock = DockStyle.Top;
+                btn.Height = buttonHeight;
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.FlatAppearance.BorderSize = 0;
+                btn.TextAlign = ContentAlignment.MiddleLeft;
+                btn.ForeColor = Color.LightGray;
+
+                // 设置你要求的字体
+                btn.Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold);
+
+                // 设置你要求的内边距 (Left=70, Top=0, Right=0, Bottom=0)
+                btn.Padding = new Padding(70, 0, 0, 0);
+
+                // 绑定点击事件，点击后在 OpenFiles 中显示该歌单内容
+                btn.Click += (s, e) => {
+                    _openFiles.LoadPlaylistSongs(btn.Text);
+                    _openFiles.BringToFront();
+                };
+
+                panelPlayListSubMenu.Controls.Add(btn);
+            }
         }
     }
 }

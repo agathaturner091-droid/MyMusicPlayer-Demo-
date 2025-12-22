@@ -34,6 +34,7 @@
             panelBorder = new Panel();
             panelBackground = new Panel();
             textBoxPlayListName = new TextBox();
+            labelClose = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSave).BeginInit();
             panelBorder.SuspendLayout();
             panelBackground.SuspendLayout();
@@ -98,16 +99,31 @@
             textBoxPlayListName.Size = new Size(268, 30);
             textBoxPlayListName.TabIndex = 4;
             // 
+            // labelClose
+            // 
+            labelClose.AutoSize = true;
+            labelClose.Font = new Font("Microsoft YaHei UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            labelClose.ForeColor = Color.White;
+            labelClose.Location = new Point(471, 14);
+            labelClose.Name = "labelClose";
+            labelClose.Size = new Size(20, 19);
+            labelClose.TabIndex = 13;
+            labelClose.Text = "✕";
+            labelClose.Click += labelClose_Click;
+            // 
             // EditDetails
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(40, 40, 40);
             ClientSize = new Size(503, 259);
+            Controls.Add(labelClose);
             Controls.Add(panelBorder);
             Controls.Add(pictureBoxSave);
             Controls.Add(labelEdit);
             FormBorderStyle = FormBorderStyle.None;
+            MaximumSize = new Size(503, 259);
+            MinimumSize = new Size(503, 259);
             Name = "EditDetails";
             Text = "EditDetails";
             ((System.ComponentModel.ISupportInitialize)pictureBoxSave).EndInit();
@@ -125,5 +141,6 @@
         private Panel panelBorder;
         private Panel panelBackground;
         private TextBox textBoxPlayListName;
+        private Label labelClose;
     }
 }
