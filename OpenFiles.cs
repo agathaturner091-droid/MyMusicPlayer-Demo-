@@ -332,6 +332,20 @@ namespace MusicPlayer
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     string path = fbd.SelectedPath;
+
+                    // 清空本地缓存路径，防止逻辑层面重复 
+                    if (_allLocalMusicCache != null)
+                    {
+                        _allLocalMusicCache.Clear();
+                    }
+
+                    // 清空界面表格，防止 UI 层面重复显示
+                    if (dataGridViewPlayList != null)
+                    {
+                        dataGridViewPlayList.Rows.Clear();
+                    }
+
+                    // 执行搜索并填充新数据
                     SearchMusic(path);
                 }
             }
@@ -340,115 +354,49 @@ namespace MusicPlayer
         {
             try
             {
-
-                //搜索的音频格式
+                // 搜索的音频格式
                 string[] extensions = { ".mp3", ".wav", ".flac", ".m4a" };
 
-                //获取目录下所有符合条件的文件
-                var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(f => extensions.Contains(Path.GetExtension(f).ToLower())).ToList();
+                // 获取目录下所有符合条件的文件
+                var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories)
+                                     .Where(f => extensions.Contains(Path.GetExtension(f).ToLower()))
+                                     .ToList();
 
-                // 保存到缓存，这样切回来时还在
+                // 保存到缓存
                 _allLocalMusicCache = new List<string>(files);
 
-                int count = 1;
-
-                //如果没有歌曲
+                // 如果没有歌曲
                 if (files.Count == 0)
                 {
                     dataGridViewPlayList.Visible = false;
                     labelAdd.Visible = true;
                     labelSearch.Visible = true;
                     return;
-
                 }
 
-                // 切换 UI 到“列表模式”
+                // 切换 UI 状态
                 labelAdd.Visible = false;
                 labelSearch.Visible = false;
                 panelBackgroundHigh.Visible = false;
-
-                if (panelBackgroundLow != null)
-                {
-                    panelBackgroundLow.Visible = false;
-                }
+                if (panelBackgroundLow != null) panelBackgroundLow.Visible = false;
 
                 dataGridViewPlayList.Visible = true;
                 btnSearch.Visible = true;
+                panelSecondBackgroundHigh.Visible = true;
 
+                int count = 1;
                 foreach (var file in files)
                 {
-                    var fileInfo = new FileInfo(file);
-                    string title = Path.GetFileNameWithoutExtension(file);
-                    string album = "未知专辑";
-                    string durationStr = "00:00";
-                    string dataAdded = fileInfo.CreationTime.ToString("yyyy-MM-dd");
-
-
-                    try
-                    {
-                        //用TagLib读取元数据
-                        using (var tfile = TagLib.File.Create(file))
-                        {
-                            //获取 TimeSpan 时间
-                            TimeSpan timeSpan = tfile.Properties.Duration;
-
-                            // 判断时间是否为0，是则跳过这个文件
-                            if (timeSpan.TotalSeconds <= 0)
-                            {
-                                continue;
-                            }
-
-                            //获得歌手信息，用,连接
-                            var artists = string.Join(",", tfile.Tag.Performers);
-                            if (string.IsNullOrEmpty(artists)) artists = "未知歌手";//防止歌手为空
-
-                            //获取歌名（如果读取不到，就用文件名）
-                            string songTitle = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(file);
-
-                            //将歌名和歌手拼接成一个格式特定的字符串
-                            //(这样在触发CellPainting 自绘事件时，代码才能根据“—”拆分出两行)
-                            string combinedTitle = $"{songTitle}-{artists}";
-
-                            //获得专辑名称
-                            album = tfile.Tag.Album ?? "未知专辑";
-
-                            //获取添加时间
-                            durationStr = timeSpan.ToString(@"mm\:ss");
-
-                            //将拼接好的内容放入标题栏
-                            dataGridViewPlayList.Rows.Add
-                                (
-                                count++,
-                                combinedTitle,
-                                album,
-                                dataAdded,
-                                durationStr,
-                                file
-                                );
-                        }
-                    }
-                    catch
-                    {
-                        dataGridViewPlayList.Rows.Add(count++, title, album, dataAdded, durationStr, file);
-                    }
-
-                    panelBackgroundHigh.Visible = false;
-                    btnSearch.Visible = true;
-                    panelSecondBackgroundHigh.Visible = true;
-
                     AddSongToGrid(file, ref count);
-
                 }
-                //自动清除选中的第一行
-                dataGridViewPlayList.ClearSelection();
-                //取消焦点单元格
-                dataGridViewPlayList.CurrentCell = null;
 
-                //确保分割线永远在最上面
+                // UI 扫尾
+                dataGridViewPlayList.ClearSelection();
+                dataGridViewPlayList.CurrentCell = null;
                 panelMiddleLine.Visible = true;
                 panelMiddleLine.BringToFront();
 
-                MessageBox.Show($"搜索完成，已加载{dataGridViewPlayList.Rows.Count}首歌曲。");
+                MessageBox.Show($"搜索完成，已加载 {dataGridViewPlayList.Rows.Count} 首歌曲。");
             }
             catch (Exception ex)
             {
@@ -829,35 +777,30 @@ namespace MusicPlayer
         //接受并显示歌单内容
         public void LoadPlaylistToGrid(string playlistName, List<string> paths)
         {
-            //无论是否有歌，先清空旧数据
+            // 基础清理与状态切换
             dataGridViewPlayList.Rows.Clear();
-
-            // 确保 UI 状态正确切换
-            // 必须先隐藏初始面板，再显示列表面板
             panelBackgroundHigh.Visible = false;
             if (panelBackgroundLow != null) panelBackgroundLow.Visible = false;
-
-            panelSecondBackgroundHigh.Visible = true; // 显示带有搜索条的顶部面板
-            dataGridViewPlayList.Visible = true;      // 显示表格
+            panelSecondBackgroundHigh.Visible = true;
+            dataGridViewPlayList.Visible = true;
             labelAdd.Visible = false;
             labelSearch.Visible = false;
 
-            // 如果歌单为空，直接结束（此时界面已经是空的列表页了）
             if (paths == null || paths.Count == 0)
             {
                 this.BringToFront();
                 return;
             }
 
-            panelSecondBackgroundHigh.Visible = true;
-            // 确保隐藏 Welcome 面板
-            panelBackgroundHigh.Visible = false; 
+            // 使用 HashSet 记录已处理过的路径，防止传入的 paths 列表本身有重复
+            HashSet<string> uniquePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // 填充数据
             int count = 1;
             foreach (var file in paths)
             {
-                if (!System.IO.File.Exists(file)) continue;
+                // 如果文件不存在，或者该路径已经添加过了，则跳过
+                if (!System.IO.File.Exists(file) || uniquePaths.Contains(file))
+                    continue;
 
                 try
                 {
@@ -865,22 +808,28 @@ namespace MusicPlayer
                     {
                         var artists = string.Join(",", tfile.Tag.Performers);
                         if (string.IsNullOrEmpty(artists)) artists = "未知歌手";
+
                         string songTitle = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(file);
                         string combinedTitle = $"{songTitle}-{artists}";
                         string album = tfile.Tag.Album ?? "未知专辑";
                         string durationStr = tfile.Properties.Duration.ToString(@"mm\:ss");
                         string dataAdded = new FileInfo(file).CreationTime.ToString("yyyy-MM-dd");
 
+                        // 添加到表格
                         dataGridViewPlayList.Rows.Add(count++, combinedTitle, album, dataAdded, durationStr, file);
+
+                        // 将路径加入已处理集合
+                        uniquePaths.Add(file);
                     }
                 }
                 catch
                 {
                     dataGridViewPlayList.Rows.Add(count++, Path.GetFileNameWithoutExtension(file), "未知专辑", "", "00:00", file);
+                    uniquePaths.Add(file);
                 }
             }
 
-            // 5. 强制显示
+            // 强制显示
             panelMiddleLine.BringToFront();
             btnSearch.BringToFront();
             this.BringToFront();

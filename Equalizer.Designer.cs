@@ -393,6 +393,7 @@
             pictureBoxSave.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxSave.TabIndex = 7;
             pictureBoxSave.TabStop = false;
+            pictureBoxSave.Click += pictureBoxSave_Click;
             // 
             // comboBoxPreset
             // 

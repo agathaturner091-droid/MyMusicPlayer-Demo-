@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using System.IO;
 
 namespace MusicPlayer
 {
@@ -42,6 +43,11 @@ namespace MusicPlayer
                     _mainForm.UpdateEqGain(index, (float)tb.Value);
                 };
             }
+        }
+
+        private void pictureBoxSave_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
