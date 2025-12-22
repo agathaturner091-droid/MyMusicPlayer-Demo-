@@ -164,6 +164,7 @@
             Name = "RightClickMenu";
             ShowIcon = false;
             Text = "RightClickMenu";
+            MouseLeave += RightClickMenu_MouseLeave;
             panelAdd.ResumeLayout(false);
             panelAdd.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).EndInit();

@@ -747,29 +747,44 @@ namespace MusicPlayer
 
         private void dataGridViewPlayList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            // 检查是否为鼠标右键点击，且点击在有效行上
             if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
             {
-                //如果点击的行不在当前的选中范围内，则清除准确的选中，之选当前行
+                // 处理行选中（如果当前行未选中，则选中它）
                 if (!dataGridViewPlayList.Rows[e.RowIndex].Selected)
                 {
                     dataGridViewPlayList.ClearSelection();
                     dataGridViewPlayList.Rows[e.RowIndex].Selected = true;
                 }
 
-                //获取所有选中的歌曲路径
+                //防止菜单重叠（如果旧菜单还在，先关闭并释放）
+                if (contextMenu != null && !contextMenu.IsDisposed)
+                {
+                    contextMenu.Close();
+                    contextMenu.Dispose();
+                }
+
+                // 获取选中的歌曲路径
                 List<string> selectedPaths = new List<string>();
                 foreach (DataGridViewRow row in dataGridViewPlayList.SelectedRows)
                 {
-                    selectedPaths.Add(row.Cells[5].Value?.ToString());
+                    if (row.Cells[5].Value != null)
+                    {
+                        selectedPaths.Add(row.Cells[5].Value.ToString());
+                    }
                 }
 
-                //弹出右键菜单并传递选中数据
+                // 实例化并显示右键菜单
                 contextMenu = new RightClickMenu(selectedPaths, this);
-                //设置为手动定位
                 contextMenu.StartPosition = FormStartPosition.Manual;
-                //设置位置为鼠标当前坐标
                 contextMenu.Location = Cursor.Position;
-                //直接Show,不传参数
+
+                // 添加失去焦点自动关闭的事件，解决菜单不消失的问题
+                contextMenu.Deactivate += (s, ev) =>
+                {
+                    contextMenu.Close();
+                };
+
                 contextMenu.Show();
             }
         }

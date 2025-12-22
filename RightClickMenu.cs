@@ -21,6 +21,14 @@ namespace MusicPlayer
             this._paths = paths;
             this._parent = parent;
 
+            this.ShowInTaskbar = false;
+            this.Owner = parent.FindForm();
+
+            // 调用示例
+            RemoveHoverEffect(btnShare);
+            RemoveHoverEffect(btnRemove);
+            RemoveHoverEffect(btnAdd);
+
             // 参数：(目标Panel, 鼠标移入时的颜色, 默认颜色)
             BindHoverEvents(panelShare, Color.FromArgb(60, 60, 60), Color.Transparent);
             BindHoverEvents(panelRemove, Color.FromArgb(60, 60, 60), Color.Transparent);
@@ -37,7 +45,7 @@ namespace MusicPlayer
             EventHandler leave = (s, e) => p.BackColor = defaultColor;
 
             p.MouseEnter += enter;
-            p.MouseLeave += leave; 
+            p.MouseLeave += leave;
 
             foreach (Control c in p.Controls)
             {
@@ -93,11 +101,11 @@ namespace MusicPlayer
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //弹出创建歌单的界面
-            EditDetails editForm= new EditDetails(_paths,_parent);
+            EditDetails editForm = new EditDetails(_paths, _parent);
             //等用户操作完再继续
             editForm.ShowDialog();
 
-            this.Close ();
+            this.Close();
         }
         void RemoveHoverEffect(Button btn)
         {
@@ -108,9 +116,13 @@ namespace MusicPlayer
             btn.FlatAppearance.MouseDownBackColor = btn.BackColor;
         }
 
-        // 调用示例
-        RemoveHoverEffect(btnShare);
-        RemoveHoverEffect(btnRemove);
-        RemoveHoverEffect(btnAdd);
+        private void RightClickMenu_MouseLeave(object sender, EventArgs e)
+        {
+            // 检查鼠标当前位置是否真的在窗口矩形范围之外
+            if (!this.ClientRectangle.Contains(this.PointToClient(Cursor.Position)))
+            {
+                this.Close();
+            }
+        }
     }
 }
