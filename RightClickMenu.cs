@@ -24,7 +24,6 @@ namespace MusicPlayer
             this._parent = parent;
 
             this.ShowInTaskbar = false;
-            this.Owner = parent.FindForm();
 
             // 调用示例
             RemoveHoverEffect(btnShare);
@@ -32,34 +31,55 @@ namespace MusicPlayer
             RemoveHoverEffect(btnAdd);
 
             // 参数：(目标Panel, 鼠标移入时的颜色, 默认颜色)
-            BindHoverEvents(panelShare, Color.FromArgb(60, 60, 60), Color.Transparent);
-            BindHoverEvents(panelRemove, Color.FromArgb(60, 60, 60), Color.Transparent);
-            BindHoverEvents(panelAdd, Color.FromArgb(60, 60, 60), Color.Transparent);
+            BindEvents(panelShare, btnShare_Click);
+            BindEvents(panelRemove, btnRemove_Click);
+            BindEvents(panelAdd, btnAdd_Click);
 
             // 标准方案：失去焦点时自动关闭菜单
-            this.Deactivate += (s, e) => this.Close();
+            this.Click += (s, e) => this.Close();
+
+            // 延迟 100ms 关闭，确保 Click 事件有时间跑完
+            this.Deactivate += async (s, e) => {
+                await System.Threading.Tasks.Task.Delay(100);
+                this.Close();
+            };
+
+            btnShare.BringToFront();
+            btnRemove.BringToFront();
+            btnAdd.BringToFront();
+
+            btnShare.Enabled = true;
+            btnRemove.Enabled = true;
+            btnAdd.Enabled = true;
+            btnShare.Visible = true;
+            btnRemove.Visible = true;
+            btnAdd.Visible = true;
         }
 
 
 
-        private void BindHoverEvents(Panel p, Color hoverColor, Color defaultColor)
+        private void BindEvents(Panel p, EventHandler clickEvent)
         {
+            Color hoverColor = Color.FromArgb(60, 60, 60);
+            Color defaultColor = Color.Transparent;
+
+            // 统一进入逻辑
             EventHandler enter = (s, e) => p.BackColor = hoverColor;
+            // 统一离开逻辑
             EventHandler leave = (s, e) => {
-                // 只有鼠标真的离开 Panel 区域才恢复颜色
                 if (!p.ClientRectangle.Contains(p.PointToClient(Cursor.Position)))
-                {
                     p.BackColor = defaultColor;
-                }
             };
 
             p.MouseEnter += enter;
             p.MouseLeave += leave;
+            p.Click += clickEvent; // 给 Panel 绑定点击
 
             foreach (Control c in p.Controls)
             {
                 c.MouseEnter += enter;
                 c.MouseLeave += leave;
+                c.Click += clickEvent; // 给按钮和标签也绑定同样的点击
             }
         }
 

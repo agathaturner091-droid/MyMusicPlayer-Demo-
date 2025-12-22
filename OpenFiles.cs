@@ -774,17 +774,18 @@ namespace MusicPlayer
                     }
                 }
 
-                // 实例化并显示右键菜单
                 contextMenu = new RightClickMenu(selectedPaths, this);
                 contextMenu.StartPosition = FormStartPosition.Manual;
                 contextMenu.Location = Cursor.Position;
 
-                // 确保点击外部时自动关闭
-                contextMenu.Deactivate += (s, ev) => { contextMenu.Close(); };
+                contextMenu.FormClosed += (s, ev) => {
+                    this.BeginInvoke(new Action(() => {
+                        this.Focus();
+                        this.Activate();
+                    }));
+                };
 
-                // 并且立即 Activate()，确保它拿到焦点，按钮才能正常响应第一次点击
                 contextMenu.Show();
-                contextMenu.Activate();
             }
         }
 
