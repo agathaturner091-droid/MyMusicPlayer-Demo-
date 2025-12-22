@@ -349,5 +349,17 @@ namespace MusicPlayer
             waveOut?.Dispose();
             audioFile?.Dispose();
         }
+        public void PlayMusic(string path)
+        {
+            DisposeWave(); // 释放旧资源
+
+            audioFile = new AudioFileReader(path);
+            // 将 audioFile 包装进均衡器处理器
+            _eqProcessor = new AudioEqualizerProcessor(audioFile);
+
+            waveOut = new WaveOutEvent();
+            waveOut.Init(_eqProcessor); 
+            waveOut.Play();
+        }
     }
 }

@@ -162,6 +162,7 @@
             Controls.Add(panelAdd);
             FormBorderStyle = FormBorderStyle.None;
             Name = "RightClickMenu";
+            ShowIcon = false;
             Text = "RightClickMenu";
             panelAdd.ResumeLayout(false);
             panelAdd.PerformLayout();

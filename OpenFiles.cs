@@ -340,7 +340,6 @@ namespace MusicPlayer
         {
             try
             {
-                dataGridViewPlayList.Rows.Clear();
 
                 //搜索的音频格式
                 string[] extensions = { ".mp3", ".wav", ".flac", ".m4a" };

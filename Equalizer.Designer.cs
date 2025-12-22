@@ -30,25 +30,25 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Equalizer));
             flowLayoutPanel31hz = new FlowLayoutPanel();
-            flowLayoutPanel62hz = new FlowLayoutPanel();
-            flowLayoutPanel125hz = new FlowLayoutPanel();
-            flowLayoutPanel250hz = new FlowLayoutPanel();
-            flowLayoutPanel500hz = new FlowLayoutPanel();
-            flowLayoutPanel1khz = new FlowLayoutPanel();
-            flowLayoutPanel2khz = new FlowLayoutPanel();
-            flowLayoutPanel4khz = new FlowLayoutPanel();
-            flowLayoutPanel8khz = new FlowLayoutPanel();
-            flowLayoutPanel16khz = new FlowLayoutPanel();
             trackBar31hz = new TrackBar();
+            flowLayoutPanel62hz = new FlowLayoutPanel();
             trackBar62hz = new TrackBar();
+            flowLayoutPanel125hz = new FlowLayoutPanel();
             trackBar125hz = new TrackBar();
+            flowLayoutPanel250hz = new FlowLayoutPanel();
             trackBar250hz = new TrackBar();
+            flowLayoutPanel500hz = new FlowLayoutPanel();
             trackBar500hz = new TrackBar();
+            flowLayoutPanel1khz = new FlowLayoutPanel();
             trackBar1khz = new TrackBar();
+            flowLayoutPanel2khz = new FlowLayoutPanel();
             trackBar2khz = new TrackBar();
-            trackBar8khz = new TrackBar();
-            trackBar16khz = new TrackBar();
+            flowLayoutPanel4khz = new FlowLayoutPanel();
             trackBar4khz = new TrackBar();
+            flowLayoutPanel8khz = new FlowLayoutPanel();
+            trackBar8khz = new TrackBar();
+            flowLayoutPanel16khz = new FlowLayoutPanel();
+            trackBar16khz = new TrackBar();
             label31hz = new Label();
             label62Hz = new Label();
             label125Hz = new Label();
@@ -59,28 +59,28 @@
             label4kHz = new Label();
             label8kHz = new Label();
             label16kHz = new Label();
-            comboBoxPreset = new ComboBox();
             pictureBoxSave = new PictureBox();
+            comboBoxPreset = new ComboBox();
             flowLayoutPanel31hz.SuspendLayout();
-            flowLayoutPanel62hz.SuspendLayout();
-            flowLayoutPanel125hz.SuspendLayout();
-            flowLayoutPanel250hz.SuspendLayout();
-            flowLayoutPanel500hz.SuspendLayout();
-            flowLayoutPanel1khz.SuspendLayout();
-            flowLayoutPanel2khz.SuspendLayout();
-            flowLayoutPanel4khz.SuspendLayout();
-            flowLayoutPanel8khz.SuspendLayout();
-            flowLayoutPanel16khz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar31hz).BeginInit();
+            flowLayoutPanel62hz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar62hz).BeginInit();
+            flowLayoutPanel125hz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar125hz).BeginInit();
+            flowLayoutPanel250hz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar250hz).BeginInit();
+            flowLayoutPanel500hz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar500hz).BeginInit();
+            flowLayoutPanel1khz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar1khz).BeginInit();
+            flowLayoutPanel2khz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar2khz).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar8khz).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar16khz).BeginInit();
+            flowLayoutPanel4khz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar4khz).BeginInit();
+            flowLayoutPanel8khz.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar8khz).BeginInit();
+            flowLayoutPanel16khz.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar16khz).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSave).BeginInit();
             SuspendLayout();
             // 
@@ -93,87 +93,6 @@
             flowLayoutPanel31hz.Size = new Size(54, 443);
             flowLayoutPanel31hz.TabIndex = 0;
             // 
-            // flowLayoutPanel62hz
-            // 
-            flowLayoutPanel62hz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel62hz.Controls.Add(trackBar62hz);
-            flowLayoutPanel62hz.Location = new Point(264, 144);
-            flowLayoutPanel62hz.Name = "flowLayoutPanel62hz";
-            flowLayoutPanel62hz.Size = new Size(56, 443);
-            flowLayoutPanel62hz.TabIndex = 0;
-            // 
-            // flowLayoutPanel125hz
-            // 
-            flowLayoutPanel125hz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel125hz.Controls.Add(trackBar125hz);
-            flowLayoutPanel125hz.Location = new Point(364, 144);
-            flowLayoutPanel125hz.Name = "flowLayoutPanel125hz";
-            flowLayoutPanel125hz.Size = new Size(56, 443);
-            flowLayoutPanel125hz.TabIndex = 0;
-            // 
-            // flowLayoutPanel250hz
-            // 
-            flowLayoutPanel250hz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel250hz.Controls.Add(trackBar250hz);
-            flowLayoutPanel250hz.Location = new Point(464, 144);
-            flowLayoutPanel250hz.Name = "flowLayoutPanel250hz";
-            flowLayoutPanel250hz.Size = new Size(56, 443);
-            flowLayoutPanel250hz.TabIndex = 0;
-            // 
-            // flowLayoutPanel500hz
-            // 
-            flowLayoutPanel500hz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel500hz.Controls.Add(trackBar500hz);
-            flowLayoutPanel500hz.Location = new Point(564, 144);
-            flowLayoutPanel500hz.Name = "flowLayoutPanel500hz";
-            flowLayoutPanel500hz.Size = new Size(56, 443);
-            flowLayoutPanel500hz.TabIndex = 0;
-            // 
-            // flowLayoutPanel1khz
-            // 
-            flowLayoutPanel1khz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel1khz.Controls.Add(trackBar1khz);
-            flowLayoutPanel1khz.Location = new Point(664, 144);
-            flowLayoutPanel1khz.Name = "flowLayoutPanel1khz";
-            flowLayoutPanel1khz.Size = new Size(56, 443);
-            flowLayoutPanel1khz.TabIndex = 0;
-            // 
-            // flowLayoutPanel2khz
-            // 
-            flowLayoutPanel2khz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel2khz.Controls.Add(trackBar2khz);
-            flowLayoutPanel2khz.Location = new Point(764, 144);
-            flowLayoutPanel2khz.Name = "flowLayoutPanel2khz";
-            flowLayoutPanel2khz.Size = new Size(56, 443);
-            flowLayoutPanel2khz.TabIndex = 0;
-            // 
-            // flowLayoutPanel4khz
-            // 
-            flowLayoutPanel4khz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel4khz.Controls.Add(trackBar4khz);
-            flowLayoutPanel4khz.Location = new Point(864, 144);
-            flowLayoutPanel4khz.Name = "flowLayoutPanel4khz";
-            flowLayoutPanel4khz.Size = new Size(56, 443);
-            flowLayoutPanel4khz.TabIndex = 0;
-            // 
-            // flowLayoutPanel8khz
-            // 
-            flowLayoutPanel8khz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel8khz.Controls.Add(trackBar8khz);
-            flowLayoutPanel8khz.Location = new Point(964, 144);
-            flowLayoutPanel8khz.Name = "flowLayoutPanel8khz";
-            flowLayoutPanel8khz.Size = new Size(56, 443);
-            flowLayoutPanel8khz.TabIndex = 0;
-            // 
-            // flowLayoutPanel16khz
-            // 
-            flowLayoutPanel16khz.BackColor = Color.FromArgb(20, 20, 20);
-            flowLayoutPanel16khz.Controls.Add(trackBar16khz);
-            flowLayoutPanel16khz.Location = new Point(1064, 144);
-            flowLayoutPanel16khz.Name = "flowLayoutPanel16khz";
-            flowLayoutPanel16khz.Size = new Size(56, 443);
-            flowLayoutPanel16khz.TabIndex = 0;
-            // 
             // trackBar31hz
             // 
             trackBar31hz.Location = new Point(3, 3);
@@ -183,6 +102,15 @@
             trackBar31hz.Size = new Size(56, 443);
             trackBar31hz.TabIndex = 0;
             trackBar31hz.Value = -10;
+            // 
+            // flowLayoutPanel62hz
+            // 
+            flowLayoutPanel62hz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel62hz.Controls.Add(trackBar62hz);
+            flowLayoutPanel62hz.Location = new Point(264, 144);
+            flowLayoutPanel62hz.Name = "flowLayoutPanel62hz";
+            flowLayoutPanel62hz.Size = new Size(56, 443);
+            flowLayoutPanel62hz.TabIndex = 0;
             // 
             // trackBar62hz
             // 
@@ -194,6 +122,15 @@
             trackBar62hz.TabIndex = 0;
             trackBar62hz.Value = -10;
             // 
+            // flowLayoutPanel125hz
+            // 
+            flowLayoutPanel125hz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel125hz.Controls.Add(trackBar125hz);
+            flowLayoutPanel125hz.Location = new Point(364, 144);
+            flowLayoutPanel125hz.Name = "flowLayoutPanel125hz";
+            flowLayoutPanel125hz.Size = new Size(56, 443);
+            flowLayoutPanel125hz.TabIndex = 0;
+            // 
             // trackBar125hz
             // 
             trackBar125hz.Location = new Point(3, 3);
@@ -203,6 +140,15 @@
             trackBar125hz.Size = new Size(56, 443);
             trackBar125hz.TabIndex = 0;
             trackBar125hz.Value = -10;
+            // 
+            // flowLayoutPanel250hz
+            // 
+            flowLayoutPanel250hz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel250hz.Controls.Add(trackBar250hz);
+            flowLayoutPanel250hz.Location = new Point(464, 144);
+            flowLayoutPanel250hz.Name = "flowLayoutPanel250hz";
+            flowLayoutPanel250hz.Size = new Size(56, 443);
+            flowLayoutPanel250hz.TabIndex = 0;
             // 
             // trackBar250hz
             // 
@@ -214,6 +160,15 @@
             trackBar250hz.TabIndex = 0;
             trackBar250hz.Value = -10;
             // 
+            // flowLayoutPanel500hz
+            // 
+            flowLayoutPanel500hz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel500hz.Controls.Add(trackBar500hz);
+            flowLayoutPanel500hz.Location = new Point(564, 144);
+            flowLayoutPanel500hz.Name = "flowLayoutPanel500hz";
+            flowLayoutPanel500hz.Size = new Size(56, 443);
+            flowLayoutPanel500hz.TabIndex = 0;
+            // 
             // trackBar500hz
             // 
             trackBar500hz.Location = new Point(3, 3);
@@ -223,6 +178,15 @@
             trackBar500hz.Size = new Size(56, 443);
             trackBar500hz.TabIndex = 0;
             trackBar500hz.Value = -10;
+            // 
+            // flowLayoutPanel1khz
+            // 
+            flowLayoutPanel1khz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel1khz.Controls.Add(trackBar1khz);
+            flowLayoutPanel1khz.Location = new Point(664, 144);
+            flowLayoutPanel1khz.Name = "flowLayoutPanel1khz";
+            flowLayoutPanel1khz.Size = new Size(56, 443);
+            flowLayoutPanel1khz.TabIndex = 0;
             // 
             // trackBar1khz
             // 
@@ -234,6 +198,15 @@
             trackBar1khz.TabIndex = 0;
             trackBar1khz.Value = -10;
             // 
+            // flowLayoutPanel2khz
+            // 
+            flowLayoutPanel2khz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel2khz.Controls.Add(trackBar2khz);
+            flowLayoutPanel2khz.Location = new Point(764, 144);
+            flowLayoutPanel2khz.Name = "flowLayoutPanel2khz";
+            flowLayoutPanel2khz.Size = new Size(56, 443);
+            flowLayoutPanel2khz.TabIndex = 0;
+            // 
             // trackBar2khz
             // 
             trackBar2khz.Location = new Point(3, 3);
@@ -243,6 +216,34 @@
             trackBar2khz.Size = new Size(56, 443);
             trackBar2khz.TabIndex = 0;
             trackBar2khz.Value = -10;
+            // 
+            // flowLayoutPanel4khz
+            // 
+            flowLayoutPanel4khz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel4khz.Controls.Add(trackBar4khz);
+            flowLayoutPanel4khz.Location = new Point(864, 144);
+            flowLayoutPanel4khz.Name = "flowLayoutPanel4khz";
+            flowLayoutPanel4khz.Size = new Size(56, 443);
+            flowLayoutPanel4khz.TabIndex = 0;
+            // 
+            // trackBar4khz
+            // 
+            trackBar4khz.Location = new Point(3, 3);
+            trackBar4khz.Minimum = -10;
+            trackBar4khz.Name = "trackBar4khz";
+            trackBar4khz.Orientation = Orientation.Vertical;
+            trackBar4khz.Size = new Size(56, 443);
+            trackBar4khz.TabIndex = 0;
+            trackBar4khz.Value = -10;
+            // 
+            // flowLayoutPanel8khz
+            // 
+            flowLayoutPanel8khz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel8khz.Controls.Add(trackBar8khz);
+            flowLayoutPanel8khz.Location = new Point(964, 144);
+            flowLayoutPanel8khz.Name = "flowLayoutPanel8khz";
+            flowLayoutPanel8khz.Size = new Size(56, 443);
+            flowLayoutPanel8khz.TabIndex = 0;
             // 
             // trackBar8khz
             // 
@@ -254,6 +255,15 @@
             trackBar8khz.TabIndex = 0;
             trackBar8khz.Value = -10;
             // 
+            // flowLayoutPanel16khz
+            // 
+            flowLayoutPanel16khz.BackColor = Color.FromArgb(20, 20, 20);
+            flowLayoutPanel16khz.Controls.Add(trackBar16khz);
+            flowLayoutPanel16khz.Location = new Point(1064, 144);
+            flowLayoutPanel16khz.Name = "flowLayoutPanel16khz";
+            flowLayoutPanel16khz.Size = new Size(56, 443);
+            flowLayoutPanel16khz.TabIndex = 0;
+            // 
             // trackBar16khz
             // 
             trackBar16khz.Location = new Point(3, 3);
@@ -263,16 +273,6 @@
             trackBar16khz.Size = new Size(56, 443);
             trackBar16khz.TabIndex = 0;
             trackBar16khz.Value = -10;
-            // 
-            // trackBar4khz
-            // 
-            trackBar4khz.Location = new Point(3, 3);
-            trackBar4khz.Minimum = -10;
-            trackBar4khz.Name = "trackBar4khz";
-            trackBar4khz.Orientation = Orientation.Vertical;
-            trackBar4khz.Size = new Size(56, 443);
-            trackBar4khz.TabIndex = 0;
-            trackBar4khz.Value = -10;
             // 
             // label31hz
             // 
@@ -384,6 +384,16 @@
             label16kHz.TabIndex = 1;
             label16kHz.Text = "16kHz";
             // 
+            // pictureBoxSave
+            // 
+            pictureBoxSave.Image = (Image)resources.GetObject("pictureBoxSave.Image");
+            pictureBoxSave.Location = new Point(1100, 663);
+            pictureBoxSave.Name = "pictureBoxSave";
+            pictureBoxSave.Size = new Size(128, 56);
+            pictureBoxSave.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBoxSave.TabIndex = 7;
+            pictureBoxSave.TabStop = false;
+            // 
             // comboBoxPreset
             // 
             comboBoxPreset.BackColor = Color.FromArgb(20, 20, 20);
@@ -396,16 +406,6 @@
             comboBoxPreset.Size = new Size(151, 37);
             comboBoxPreset.TabIndex = 2;
             comboBoxPreset.Text = "Preset";
-            // 
-            // pictureBoxSave
-            // 
-            pictureBoxSave.Image = (Image)resources.GetObject("pictureBoxSave.Image");
-            pictureBoxSave.Location = new Point(1100, 663);
-            pictureBoxSave.Name = "pictureBoxSave";
-            pictureBoxSave.Size = new Size(128, 56);
-            pictureBoxSave.SizeMode = PictureBoxSizeMode.AutoSize;
-            pictureBoxSave.TabIndex = 7;
-            pictureBoxSave.TabStop = false;
             // 
             // Equalizer
             // 
@@ -440,34 +440,34 @@
             Text = "Form3";
             flowLayoutPanel31hz.ResumeLayout(false);
             flowLayoutPanel31hz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar31hz).EndInit();
             flowLayoutPanel62hz.ResumeLayout(false);
             flowLayoutPanel62hz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar62hz).EndInit();
             flowLayoutPanel125hz.ResumeLayout(false);
             flowLayoutPanel125hz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar125hz).EndInit();
             flowLayoutPanel250hz.ResumeLayout(false);
             flowLayoutPanel250hz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar250hz).EndInit();
             flowLayoutPanel500hz.ResumeLayout(false);
             flowLayoutPanel500hz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar500hz).EndInit();
             flowLayoutPanel1khz.ResumeLayout(false);
             flowLayoutPanel1khz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar1khz).EndInit();
             flowLayoutPanel2khz.ResumeLayout(false);
             flowLayoutPanel2khz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar2khz).EndInit();
             flowLayoutPanel4khz.ResumeLayout(false);
             flowLayoutPanel4khz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar4khz).EndInit();
             flowLayoutPanel8khz.ResumeLayout(false);
             flowLayoutPanel8khz.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar8khz).EndInit();
             flowLayoutPanel16khz.ResumeLayout(false);
             flowLayoutPanel16khz.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)trackBar31hz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar62hz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar125hz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar250hz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar500hz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar1khz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar2khz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar8khz).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar16khz).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar4khz).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSave).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -505,7 +505,7 @@
         private Label label4kHz;
         private Label label8kHz;
         private Label label16kHz;
-        private ComboBox comboBoxPreset;
         private PictureBox pictureBoxSave;
+        private ComboBox comboBoxPreset;
     }
 }

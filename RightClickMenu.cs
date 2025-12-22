@@ -14,6 +14,7 @@ namespace MusicPlayer
     {
         private List<string> _paths;
         private OpenFiles _parent;
+
         public RightClickMenu(List<string> paths, OpenFiles parent)
         {
             InitializeComponent();
@@ -98,5 +99,18 @@ namespace MusicPlayer
 
             this.Close ();
         }
+        void RemoveHoverEffect(Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            // 将鼠标滑过和按下时的颜色设为与按钮背景色相同
+            btn.FlatAppearance.MouseOverBackColor = btn.BackColor;
+            btn.FlatAppearance.MouseDownBackColor = btn.BackColor;
+        }
+
+        // 调用示例
+        RemoveHoverEffect(btnShare);
+        RemoveHoverEffect(btnRemove);
+        RemoveHoverEffect(btnAdd);
     }
 }
