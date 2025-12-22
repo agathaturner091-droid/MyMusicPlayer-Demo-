@@ -21,6 +21,8 @@ namespace MusicPlayer
         //储存搜索到的音乐数据
         private List<MusicInfo> musicList = new List<MusicInfo>();
 
+        // 用于缓存所有本地导入的歌曲路径，防止切走后丢失
+        private List<string> _allLocalMusicCache = new List<string>();
 
         //创建播放器实例
         private WMPLib.WindowsMediaPlayer player = new WMPLib.WindowsMediaPlayer();
@@ -345,6 +347,10 @@ namespace MusicPlayer
 
                 //获取目录下所有符合条件的文件
                 var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(f => extensions.Contains(Path.GetExtension(f).ToLower())).ToList();
+
+                // 保存到缓存，这样切回来时还在
+                _allLocalMusicCache = new List<string>(files);
+
                 int count = 1;
 
                 //如果没有歌曲
@@ -357,6 +363,7 @@ namespace MusicPlayer
 
                 }
 
+                // 切换 UI 到“列表模式”
                 labelAdd.Visible = false;
                 labelSearch.Visible = false;
                 panelBackgroundHigh.Visible = false;
@@ -430,11 +437,17 @@ namespace MusicPlayer
                     btnSearch.Visible = true;
                     panelSecondBackgroundHigh.Visible = true;
 
+                    AddSongToGrid(file, ref count);
+
                 }
                 //自动清除选中的第一行
                 dataGridViewPlayList.ClearSelection();
                 //取消焦点单元格
                 dataGridViewPlayList.CurrentCell = null;
+
+                //确保分割线永远在最上面
+                panelMiddleLine.Visible = true;
+                panelMiddleLine.BringToFront();
 
                 MessageBox.Show($"搜索完成，已加载{dataGridViewPlayList.Rows.Count}首歌曲。");
             }
@@ -837,6 +850,10 @@ namespace MusicPlayer
                 return;
             }
 
+            panelSecondBackgroundHigh.Visible = true;
+            // 确保隐藏 Welcome 面板
+            panelBackgroundHigh.Visible = false; 
+
             // 填充数据
             int count = 1;
             foreach (var file in paths)
@@ -865,6 +882,8 @@ namespace MusicPlayer
             }
 
             // 5. 强制显示
+            panelMiddleLine.BringToFront();
+            btnSearch.BringToFront();
             this.BringToFront();
         }
 
@@ -879,21 +898,72 @@ namespace MusicPlayer
 
         public void ResetToAllMusic()
         {
-            // 恢复初始 UI 状态
-            labelAdd.Visible = true;
-            labelSearch.Visible = true;
+            // 判断缓存里有没有歌
+            if (_allLocalMusicCache != null && _allLocalMusicCache.Count > 0)
+            {
+                // === 情况 A：之前导入过歌曲，恢复显示 ===
 
-            // 显示初始面板，隐藏歌单列表面板
-            panelBackgroundHigh.Visible = true;
-            panelSecondBackgroundHigh.Visible = false; 
-            if (panelBackgroundLow != null) panelBackgroundLow.Visible = true; 
+                // 切换 UI：隐藏欢迎页，显示列表页
+                labelAdd.Visible = false;
+                labelSearch.Visible = false;
+                panelBackgroundHigh.Visible = false;
+                if (panelBackgroundLow != null) panelBackgroundLow.Visible = false;
 
-            // 隐藏并清空表格
-            dataGridViewPlayList.Visible = false;
-            dataGridViewPlayList.Rows.Clear();
+                panelSecondBackgroundHigh.Visible = true;
+                dataGridViewPlayList.Visible = true;
+                btnSearch.Visible = true;
 
-            // 将窗体带到最前
+                // 重新填充表格 (复用缓存)
+                dataGridViewPlayList.Rows.Clear();
+                int count = 1;
+                foreach (var file in _allLocalMusicCache)
+                {
+                    AddSongToGrid(file, ref count);
+                }
+            }
+            else
+            {
+                // === 情况 B：没有任何歌曲，显示初始欢迎页 ===
+                labelAdd.Visible = true;
+                labelSearch.Visible = true;
+
+                panelBackgroundHigh.Visible = true;
+                panelSecondBackgroundHigh.Visible = false;
+                if (panelBackgroundLow != null) panelBackgroundLow.Visible = true;
+
+                dataGridViewPlayList.Visible = false;
+                dataGridViewPlayList.Rows.Clear();
+            }
+
+            // 确保分割线和搜索按钮在最上层
+            panelMiddleLine.BringToFront();
+            btnSearch.BringToFront();
+
             this.BringToFront();
+        }
+
+        private void AddSongToGrid(string file, ref int count)
+        {
+            if (!System.IO.File.Exists(file)) return;
+            try
+            {
+                using (var tfile = TagLib.File.Create(file))
+                {
+                    var artists = string.Join(",", tfile.Tag.Performers);
+                    if (string.IsNullOrEmpty(artists)) artists = "未知歌手";
+                    string songTitle = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(file);
+                    string combinedTitle = $"{songTitle}-{artists}";
+                    string album = tfile.Tag.Album ?? "未知专辑";
+                    string durationStr = tfile.Properties.Duration.ToString(@"mm\:ss");
+                    string dataAdded = new FileInfo(file).CreationTime.ToString("yyyy-MM-dd");
+
+                    dataGridViewPlayList.Rows.Add(count++, combinedTitle, album, dataAdded, durationStr, file);
+                }
+            }
+            catch
+            {
+                dataGridViewPlayList.Rows.Add(count++, Path.GetFileNameWithoutExtension(file), "未知专辑", "", "00:00", file);
+            }
         }
     }
     //音乐信息
