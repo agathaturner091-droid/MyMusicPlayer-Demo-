@@ -66,18 +66,20 @@ namespace MusicPlayer
 
         private void BindEvents(Panel p, EventHandler clickEvent)
         {
-            // 鼠标移入变色，移出透明
             p.MouseEnter += (s, e) => p.BackColor = Color.FromArgb(60, 60, 60);
             p.MouseLeave += (s, e) => {
                 if (!p.ClientRectangle.Contains(p.PointToClient(Cursor.Position)))
                     p.BackColor = Color.Transparent;
             };
 
+            // 绑定 Panel 自身的点击
+            p.Click -= clickEvent; // 先移除防止重复
+            p.Click += clickEvent;
+
             foreach (Control c in p.Controls)
             {
+                c.Click -= clickEvent; // 先移除防止重复
                 c.Click += clickEvent;
-
-                // 可选：让子控件进入时也能触发 Panel 的变色
                 c.MouseEnter += (s, e) => p.BackColor = Color.FromArgb(60, 60, 60);
             }
         }

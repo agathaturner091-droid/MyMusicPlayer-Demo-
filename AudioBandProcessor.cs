@@ -5,34 +5,45 @@ using System;
 
 namespace MusicPlayer
 {
-    // 重命名为 AudioEqualizerProcessor，避免与 Form3(Equalizer) 冲突
     public class AudioEqualizerProcessor : ISampleProvider
     {
         private readonly ISampleProvider sourceProvider;
-        private readonly BiQuadFilter[] filters;
-        // 对应你滑动条的 10 个标准频率
+        // 修改为二维数组：filters[声道索引, 频段索引]
+        private readonly BiQuadFilter[,] filters;
         private static readonly float[] Frequencies = { 31, 62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000 };
+        private readonly int channels;
 
         public WaveFormat WaveFormat => sourceProvider.WaveFormat;
 
         public AudioEqualizerProcessor(ISampleProvider sourceProvider)
         {
             this.sourceProvider = sourceProvider;
-            this.filters = new BiQuadFilter[Frequencies.Length];
+            this.channels = sourceProvider.WaveFormat.Channels;
+            // 初始化：声道数 x 10个频段
+            this.filters = new BiQuadFilter[channels, Frequencies.Length];
 
-            for (int i = 0; i < Frequencies.Length; i++)
+            for (int ch = 0; ch < channels; ch++)
             {
-                // 初始化滤波器，Q值设为 0.8，初始增益为 0dB
-                filters[i] = BiQuadFilter.PeakingEQ(sourceProvider.WaveFormat.SampleRate, Frequencies[i], 0.8f, 0.0f);
+                for (int i = 0; i < Frequencies.Length; i++)
+                {
+                    filters[ch, i] = BiQuadFilter.PeakingEQ(sourceProvider.WaveFormat.SampleRate, Frequencies[i], 0.8f, 0.0f);
+                }
             }
         }
 
-        // 更新指定频段的增益
-        public void SetGain(int bandIndex, float gainDb)
+        public void SetGain(int index, float gainDb)
         {
-            if (bandIndex >= 0 && bandIndex < filters.Length)
+            if (index >= 0 && index < Frequencies.Length)
             {
-                filters[bandIndex] = BiQuadFilter.PeakingEQ(WaveFormat.SampleRate, Frequencies[bandIndex], 0.8f, gainDb);
+                for (int ch = 0; ch < channels; ch++)
+                {
+                    filters[ch, index] = BiQuadFilter.PeakingEQ(
+                        sourceProvider.WaveFormat.SampleRate,
+                        Frequencies[index],
+                        0.8f,
+                        gainDb
+                    );
+                }
             }
         }
 
@@ -41,9 +52,11 @@ namespace MusicPlayer
             int samplesRead = sourceProvider.Read(buffer, offset, count);
             for (int n = 0; n < samplesRead; n++)
             {
-                for (int i = 0; i < filters.Length; i++)
+                // 自动判断当前采样属于哪个声道
+                int ch = (offset + n) % channels;
+                for (int i = 0; i < Frequencies.Length; i++)
                 {
-                    buffer[offset + n] = filters[i].Transform(buffer[offset + n]);
+                    buffer[offset + n] = filters[ch, i].Transform(buffer[offset + n]);
                 }
             }
             return samplesRead;

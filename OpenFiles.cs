@@ -780,12 +780,13 @@ namespace MusicPlayer
 
                 contextMenu.FormClosed += (s, ev) => {
                     this.BeginInvoke(new Action(() => {
-                        this.Focus();
                         this.Activate();
+                        this.Focus();
                     }));
                 };
 
                 contextMenu.Show();
+                contextMenu.Activate();
             }
         }
 

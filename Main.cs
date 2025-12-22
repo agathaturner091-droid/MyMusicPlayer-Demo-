@@ -14,10 +14,11 @@ namespace MusicPlayer
         private OpenFiles _openFiles;
 
         private List<string> allLocalPaths = new List<string>();
+        private float[] currentEqGains = new float[10];
 
-        private IWavePlayer waveOut;
-        private AudioFileReader audioFile; 
+        private AudioFileReader audioFile;
         private AudioEqualizerProcessor _eqProcessor;
+        private WaveOutEvent waveOut; 
 
         public Main()
         {
@@ -338,10 +339,19 @@ namespace MusicPlayer
         }
 
         // 供调用的更新接口
-        public void UpdateEqGain(int index, float db)
+        public void UpdateEqGain(int bandIndex, float gainDb)
         {
-            _eqProcessor?.SetGain(index, db);
+            if (bandIndex >= 0 && bandIndex < currentEqGains.Length)
+            {
+                currentEqGains[bandIndex] = gainDb; // 存下这个数值
+            }
+
+            if (_eqProcessor != null)
+            {
+                _eqProcessor.SetGain(bandIndex, gainDb);
+            }
         }
+        public float[] GetCurrentEqGains() => currentEqGains;
 
         private void DisposeWave()
         {
@@ -353,13 +363,30 @@ namespace MusicPlayer
         {
             DisposeWave(); // 释放旧资源
 
-            audioFile = new AudioFileReader(path);
-            // 将 audioFile 包装进均衡器处理器
-            _eqProcessor = new AudioEqualizerProcessor(audioFile);
+            try
+            {
+                //  创建读取器
+                audioFile = new AudioFileReader(path);
 
-            waveOut = new WaveOutEvent();
-            waveOut.Init(_eqProcessor); 
-            waveOut.Play();
+                //实例化均衡器处理器，传入读取器
+                _eqProcessor = new AudioEqualizerProcessor(audioFile);
+
+                // 实例化播放设备 (如果之前没实例化过)
+                if (waveOut == null)
+                {
+                    waveOut = new WaveOutEvent();
+                }
+
+                // 将【处理器】初始化到播放设备中
+                waveOut.Init(_eqProcessor);
+
+                // 开始播放
+                waveOut.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("播放失败: " + ex.Message);
+            }
         }
     }
 }

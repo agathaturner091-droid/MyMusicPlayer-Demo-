@@ -330,6 +330,7 @@
             btnHelp.TextAlign = ContentAlignment.MiddleLeft;
             btnHelp.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnHelp.UseVisualStyleBackColor = true;
+            btnHelp.Visible = false;
             // 
             // panelToolsSubMenu
             // 
@@ -341,6 +342,7 @@
             panelToolsSubMenu.Name = "panelToolsSubMenu";
             panelToolsSubMenu.Size = new Size(283, 148);
             panelToolsSubMenu.TabIndex = 5;
+            panelToolsSubMenu.Visible = false;
             // 
             // btnEffectsAndFiliters
             // 
@@ -396,6 +398,7 @@
             btnTools.TextAlign = ContentAlignment.MiddleLeft;
             btnTools.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnTools.UseVisualStyleBackColor = true;
+            btnTools.Visible = false;
             btnTools.Click += btnTools_Click;
             // 
             // btnEqualizer

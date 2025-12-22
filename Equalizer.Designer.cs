@@ -60,7 +60,6 @@
             label8kHz = new Label();
             label16kHz = new Label();
             pictureBoxSave = new PictureBox();
-            comboBoxPreset = new ComboBox();
             flowLayoutPanel31hz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar31hz).BeginInit();
             flowLayoutPanel62hz.SuspendLayout();
@@ -395,19 +394,6 @@
             pictureBoxSave.TabStop = false;
             pictureBoxSave.Click += pictureBoxSave_Click;
             // 
-            // comboBoxPreset
-            // 
-            comboBoxPreset.BackColor = Color.FromArgb(20, 20, 20);
-            comboBoxPreset.FlatStyle = FlatStyle.Flat;
-            comboBoxPreset.Font = new Font("思源黑体 CN", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
-            comboBoxPreset.ForeColor = Color.White;
-            comboBoxPreset.FormattingEnabled = true;
-            comboBoxPreset.Location = new Point(67, 53);
-            comboBoxPreset.Name = "comboBoxPreset";
-            comboBoxPreset.Size = new Size(151, 37);
-            comboBoxPreset.TabIndex = 2;
-            comboBoxPreset.Text = "Preset";
-            // 
             // Equalizer
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
@@ -415,7 +401,6 @@
             BackColor = Color.FromArgb(24, 24, 24);
             ClientSize = new Size(1299, 760);
             Controls.Add(pictureBoxSave);
-            Controls.Add(comboBoxPreset);
             Controls.Add(label16kHz);
             Controls.Add(label8kHz);
             Controls.Add(label4kHz);
@@ -507,6 +492,5 @@
         private Label label8kHz;
         private Label label16kHz;
         private PictureBox pictureBoxSave;
-        private ComboBox comboBoxPreset;
     }
 }
