@@ -19,9 +19,28 @@ namespace MusicPlayer
             //传入
             OpenFiles of=new OpenFiles(this);
             of.TopLevel = false;
+
         }
 
         private OpenFiles _openFilesForm;
+
+        //存储歌单名和歌曲路径的对应关系
+        private Dictionary<string, List<string>> playListDictionary = new Dictionary<string, List<string>>();
+
+        public void CreateNewPlayListUI(string name,List<string> paths)
+        {
+            //数据处理：如果歌单已存在则合并，否不存在则新建
+            if (playListDictionary.ContainsKey(name))
+            {
+                playListDictionary[name].AddRange(paths);
+                MessageBox.Show($"已将歌曲添加到现有歌单：{name}");
+                return;
+            }
+
+            playListDictionary.Add(name, paths);
+        }
+
+        //动态UI生成：在左侧列表创建点击项
 
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]

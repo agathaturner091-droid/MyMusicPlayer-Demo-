@@ -48,11 +48,11 @@
             panelMusicSource = new Panel();
             btnHelp = new Button();
             panelToolsSubMenu = new Panel();
-            btnPreferences = new Button();
             btnEffectsAndFiliters = new Button();
             btnMediaConverter = new Button();
             btnTools = new Button();
             btnEqualizer = new Button();
+            panelPlayListSubMenu = new Panel();
             btnPlayList = new Button();
             btnMedia = new Button();
             panelLogo = new Panel();
@@ -65,6 +65,7 @@
             pictureBoxPicture = new PictureBox();
             panelChildForm = new Panel();
             pictureBoxLogoMain = new PictureBox();
+            pictureBoxAdd = new PictureBox();
             panelPlayer = new Panel();
             panelPlayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxStop).BeginInit();
@@ -89,6 +90,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxPicture).BeginInit();
             panelChildForm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogoMain).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).BeginInit();
             SuspendLayout();
             // 
             // panelPlayer
@@ -284,10 +286,12 @@
             // 
             panelMusicSource.AutoScroll = true;
             panelMusicSource.BackColor = Color.FromArgb(18, 18, 18);
+            panelMusicSource.Controls.Add(pictureBoxAdd);
             panelMusicSource.Controls.Add(btnHelp);
             panelMusicSource.Controls.Add(panelToolsSubMenu);
             panelMusicSource.Controls.Add(btnTools);
             panelMusicSource.Controls.Add(btnEqualizer);
+            panelMusicSource.Controls.Add(panelPlayListSubMenu);
             panelMusicSource.Controls.Add(btnPlayList);
             panelMusicSource.Controls.Add(btnMedia);
             panelMusicSource.Controls.Add(panelLogo);
@@ -306,7 +310,7 @@
             btnHelp.ForeColor = Color.White;
             btnHelp.Image = (Image)resources.GetObject("btnHelp.Image");
             btnHelp.ImageAlign = ContentAlignment.MiddleLeft;
-            btnHelp.Location = new Point(0, 453);
+            btnHelp.Location = new Point(0, 601);
             btnHelp.Name = "btnHelp";
             btnHelp.Padding = new Padding(10, 0, 0, 0);
             btnHelp.Size = new Size(283, 45);
@@ -319,32 +323,13 @@
             // panelToolsSubMenu
             // 
             panelToolsSubMenu.BackColor = Color.FromArgb(20, 20, 20);
-            panelToolsSubMenu.Controls.Add(btnPreferences);
             panelToolsSubMenu.Controls.Add(btnEffectsAndFiliters);
             panelToolsSubMenu.Controls.Add(btnMediaConverter);
             panelToolsSubMenu.Dock = DockStyle.Top;
-            panelToolsSubMenu.Location = new Point(0, 305);
+            panelToolsSubMenu.Location = new Point(0, 453);
             panelToolsSubMenu.Name = "panelToolsSubMenu";
             panelToolsSubMenu.Size = new Size(283, 148);
             panelToolsSubMenu.TabIndex = 5;
-            // 
-            // btnPreferences
-            // 
-            btnPreferences.Dock = DockStyle.Top;
-            btnPreferences.FlatAppearance.BorderSize = 0;
-            btnPreferences.FlatAppearance.MouseDownBackColor = Color.FromArgb(42, 42, 42);
-            btnPreferences.FlatAppearance.MouseOverBackColor = Color.FromArgb(31, 31, 31);
-            btnPreferences.FlatStyle = FlatStyle.Flat;
-            btnPreferences.ForeColor = Color.White;
-            btnPreferences.Location = new Point(0, 90);
-            btnPreferences.Name = "btnPreferences";
-            btnPreferences.Padding = new Padding(70, 0, 0, 0);
-            btnPreferences.Size = new Size(283, 45);
-            btnPreferences.TabIndex = 2;
-            btnPreferences.Text = "Preferences";
-            btnPreferences.TextAlign = ContentAlignment.MiddleLeft;
-            btnPreferences.UseVisualStyleBackColor = true;
-            btnPreferences.Click += button12_Click;
             // 
             // btnEffectsAndFiliters
             // 
@@ -391,7 +376,7 @@
             btnTools.ForeColor = Color.White;
             btnTools.Image = (Image)resources.GetObject("btnTools.Image");
             btnTools.ImageAlign = ContentAlignment.MiddleLeft;
-            btnTools.Location = new Point(0, 260);
+            btnTools.Location = new Point(0, 408);
             btnTools.Name = "btnTools";
             btnTools.Padding = new Padding(10, 0, 0, 0);
             btnTools.Size = new Size(283, 45);
@@ -411,7 +396,7 @@
             btnEqualizer.ForeColor = Color.White;
             btnEqualizer.Image = (Image)resources.GetObject("btnEqualizer.Image");
             btnEqualizer.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEqualizer.Location = new Point(0, 215);
+            btnEqualizer.Location = new Point(0, 363);
             btnEqualizer.Name = "btnEqualizer";
             btnEqualizer.Padding = new Padding(10, 0, 0, 0);
             btnEqualizer.Size = new Size(283, 45);
@@ -421,6 +406,15 @@
             btnEqualizer.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEqualizer.UseVisualStyleBackColor = true;
             btnEqualizer.Click += btnEqualizer_Click;
+            // 
+            // panelPlayListSubMenu
+            // 
+            panelPlayListSubMenu.BackColor = Color.FromArgb(20, 20, 20);
+            panelPlayListSubMenu.Dock = DockStyle.Top;
+            panelPlayListSubMenu.Location = new Point(0, 215);
+            panelPlayListSubMenu.Name = "panelPlayListSubMenu";
+            panelPlayListSubMenu.Size = new Size(283, 148);
+            panelPlayListSubMenu.TabIndex = 6;
             // 
             // btnPlayList
             // 
@@ -578,6 +572,16 @@
             pictureBoxLogoMain.TabIndex = 0;
             pictureBoxLogoMain.TabStop = false;
             // 
+            // pictureBoxAdd
+            // 
+            pictureBoxAdd.Image = (Image)resources.GetObject("pictureBoxAdd.Image");
+            pictureBoxAdd.Location = new Point(242, 176);
+            pictureBoxAdd.Name = "pictureBoxAdd";
+            pictureBoxAdd.Size = new Size(35, 35);
+            pictureBoxAdd.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBoxAdd.TabIndex = 2;
+            pictureBoxAdd.TabStop = false;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(10F, 23F);
@@ -611,6 +615,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxLastSong).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlay).EndInit();
             panelMusicSource.ResumeLayout(false);
+            panelMusicSource.PerformLayout();
             panelToolsSubMenu.ResumeLayout(false);
             panelLogo.ResumeLayout(false);
             panelLogo.PerformLayout();
@@ -622,6 +627,7 @@
             panelChildForm.ResumeLayout(false);
             panelChildForm.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogoMain).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxAdd).EndInit();
             ResumeLayout(false);
         }
 
@@ -663,5 +669,7 @@
         public PictureBox pictureBoxCycleSolo;
         public PictureBox pictureBoxRandomNot;
         public PictureBox pictureBoxCycleNot;
+        private Panel panelPlayListSubMenu;
+        private PictureBox pictureBoxAdd;
     }
 }

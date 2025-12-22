@@ -60,6 +60,7 @@
             btnAdd.Text = "Add to playlist";
             btnAdd.TextAlign = ContentAlignment.MiddleLeft;
             btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
             // 
             // panelAdd
             // 

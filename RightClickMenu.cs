@@ -63,5 +63,15 @@ namespace MusicPlayer
             }
             this.Close();
         }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            //弹出创建歌单的界面
+            EditDetails editForm= new EditDetails(_paths,_parent);
+            //等用户操作完再继续
+            editForm.ShowDialog();
+
+            this.Close ();
+        }
     }
 }
