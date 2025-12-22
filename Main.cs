@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Security.Permissions;
 using System.Drawing.Text;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace MusicPlayer
 {
@@ -12,6 +14,10 @@ namespace MusicPlayer
         private OpenFiles _openFiles;
 
         private List<string> allLocalPaths = new List<string>();
+
+        private IWavePlayer waveOut;
+        private AudioFileReader audioFile; 
+        private AudioEqualizerProcessor _eqProcessor;
 
         public Main()
         {
@@ -182,11 +188,7 @@ namespace MusicPlayer
         }
         private void btnEqualizer_Click(object sender, EventArgs e)
         {
-
-            OpenChildForm(new Form3());
-            //...
-            //代码
-            //...
+            OpenChildForm(new Equalizer(this));
             HideSubMenu();
         }
 
@@ -333,6 +335,19 @@ namespace MusicPlayer
             }
 
             panelPlayListSubMenu.Visible = true;
+        }
+
+        // 供调用的更新接口
+        public void UpdateEqGain(int index, float db)
+        {
+            _eqProcessor?.SetGain(index, db);
+        }
+
+        private void DisposeWave()
+        {
+            waveOut?.Stop();
+            waveOut?.Dispose();
+            audioFile?.Dispose();
         }
     }
 }

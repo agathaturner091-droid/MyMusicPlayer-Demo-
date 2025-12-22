@@ -4,13 +4,13 @@
     <Compile Update="EditDetails.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Equalizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="OpenFiles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Equalizer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="LogIn.cs">
