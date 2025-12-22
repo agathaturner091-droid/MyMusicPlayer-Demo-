@@ -581,6 +581,7 @@
             pictureBoxAdd.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxAdd.TabIndex = 2;
             pictureBoxAdd.TabStop = false;
+            pictureBoxAdd.Click += pictureBoxAdd_Click;
             // 
             // Main
             // 

@@ -17,7 +17,7 @@ namespace MusicPlayer
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
             //传入
-            OpenFiles of=new OpenFiles(this);
+            OpenFiles of = new OpenFiles(this);
             of.TopLevel = false;
 
         }
@@ -27,7 +27,7 @@ namespace MusicPlayer
         //存储歌单名和歌曲路径的对应关系
         private Dictionary<string, List<string>> playListDictionary = new Dictionary<string, List<string>>();
 
-        public void CreateNewPlayListUI(string name,List<string> paths)
+        public void CreateNewPlayListUI(string name, List<string> paths)
         {
             //数据处理：如果歌单已存在则合并，否不存在则新建
             if (playListDictionary.ContainsKey(name))
@@ -38,6 +38,29 @@ namespace MusicPlayer
             }
 
             playListDictionary.Add(name, paths);
+
+            //创建子菜单按钮
+            Button btnItem=new Button();
+            btnItem.Text = "      " + name;
+            btnItem.Size = new Size(panelPlayListSubMenu.Width - 5, 35);
+            btnItem.FlatStyle=FlatStyle.Flat;
+            btnItem.FlatAppearance.BorderSize = 0;
+            btnItem.TextAlign = ContentAlignment.MiddleLeft;
+            btnItem.ForeColor = Color.White;
+            btnItem.Cursor = Cursor.Hand;
+
+            //点击歌名：再OpenFiles的数据表中展示歌曲
+            btnItem.Click += (s, e) =>
+            {
+                //加载属于该歌单的paths
+                _openFiles.LoadPlayListToGrid(name, playListDictionary[name]);
+            };
+
+            //添加到容器
+            panelPlayListSubMenu.Controls.Add(btnItem);
+
+            //确保是展开状态
+            panelPlayListSubMenu.Visible = true;
         }
 
         //动态UI生成：在左侧列表创建点击项
@@ -156,7 +179,7 @@ namespace MusicPlayer
             {
                 _openFilesForm = new OpenFiles(this);
                 _openFilesForm.TopLevel = false;
-                _openFilesForm.Dock=DockStyle.Fill;
+                _openFilesForm.Dock = DockStyle.Fill;
                 panelChildForm.Controls.Add(_openFilesForm);
             }
 
@@ -165,7 +188,7 @@ namespace MusicPlayer
         }
         private void btnPlayList_Click(object sender, EventArgs e)
         {
-
+            panelPlayListSubMenu.Visible = !panelPlayListSubMenu.Visible;
         }
         private void btnEqualizer_Click(object sender, EventArgs e)
         {
@@ -232,6 +255,12 @@ namespace MusicPlayer
             panelChildForm.Tag = childForm;
             childForm.BringToFront();
             childForm.Show();
+        }
+
+        private void pictureBoxAdd_Click(object sender, EventArgs e)
+        {
+            EditDetails editForm = new EditDetails(new List<string>(), _openFiles);
+            editForm.ShowDialog();
         }
     }
 }
