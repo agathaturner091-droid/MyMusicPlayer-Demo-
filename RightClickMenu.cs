@@ -38,10 +38,16 @@ namespace MusicPlayer
             // 标准方案：失去焦点时自动关闭菜单
             this.Click += (s, e) => this.Close();
 
-            // 延迟 100ms 关闭，确保 Click 事件有时间跑完
+            // 关键点 3：优化后的失焦关闭逻辑
             this.Deactivate += async (s, e) => {
-                await System.Threading.Tasks.Task.Delay(100);
-                this.Close();
+                // 给系统 200 毫秒时间来处理可能发生的 Click 事件
+                await System.Threading.Tasks.Task.Delay(200);
+
+                // 只有当鼠标真的不在菜单范围内，且用户没有按着鼠标键时，才关闭
+                if (!this.Bounds.Contains(Cursor.Position) && Control.MouseButtons == MouseButtons.None)
+                {
+                    if (!this.IsDisposed) this.Close();
+                }
             };
 
             btnShare.BringToFront();
@@ -60,31 +66,25 @@ namespace MusicPlayer
 
         private void BindEvents(Panel p, EventHandler clickEvent)
         {
-            Color hoverColor = Color.FromArgb(60, 60, 60);
-            Color defaultColor = Color.Transparent;
-
-            // 统一进入逻辑
-            EventHandler enter = (s, e) => p.BackColor = hoverColor;
-            // 统一离开逻辑
-            EventHandler leave = (s, e) => {
+            // 鼠标移入变色，移出透明
+            p.MouseEnter += (s, e) => p.BackColor = Color.FromArgb(60, 60, 60);
+            p.MouseLeave += (s, e) => {
                 if (!p.ClientRectangle.Contains(p.PointToClient(Cursor.Position)))
-                    p.BackColor = defaultColor;
+                    p.BackColor = Color.Transparent;
             };
-
-            p.MouseEnter += enter;
-            p.MouseLeave += leave;
-            p.Click += clickEvent; // 给 Panel 绑定点击
 
             foreach (Control c in p.Controls)
             {
-                c.MouseEnter += enter;
-                c.MouseLeave += leave;
-                c.Click += clickEvent; // 给按钮和标签也绑定同样的点击
+                c.Click += clickEvent;
+
+                // 可选：让子控件进入时也能触发 Panel 的变色
+                c.MouseEnter += (s, e) => p.BackColor = Color.FromArgb(60, 60, 60);
             }
         }
 
         private void btnShare_Click(object sender, EventArgs e)
         {
+            this.Close();
             //单个文件导出
             if (_paths.Count == 1)
             {
@@ -110,11 +110,11 @@ namespace MusicPlayer
                     MessageBox.Show($"已成功分享{_paths.Count}首歌曲到目标目录。");
                 }
             }
-            this.Close();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
+            this.Close();
             var result = MessageBox.Show($"确定要从列表中移除选中的{_paths.Count}首歌曲吗？", "提示", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
@@ -124,11 +124,11 @@ namespace MusicPlayer
                     _parent.dataGridViewPlayList.Rows.Remove(_parent.dataGridViewPlayList.SelectedRows[i]);
                 }
             }
-            this.Close();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            this.Close();
             //弹出创建歌单的界面
             EditDetails editForm = new EditDetails(_paths, _parent);
             //等用户操作完再继续
