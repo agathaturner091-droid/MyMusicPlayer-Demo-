@@ -17,22 +17,16 @@ namespace MusicPlayer
 
         private System.Windows.Forms.Timer mouseCheckTimer;
 
-        // 记录菜单打开的时间点
-        private DateTime _startTime;
-
         public RightClickMenu(List<string> paths, OpenFiles parent)
         {
             InitializeComponent();
             this._paths = paths;
             this._parent = parent;
 
-            //记录打开时间
-            _startTime = DateTime.Now;
-
             this.ShowInTaskbar = false;
             this.Owner = parent.FindForm();
 
-            // 取消按钮自带的点击/悬停效果
+            // 调用示例
             RemoveHoverEffect(btnShare);
             RemoveHoverEffect(btnRemove);
             RemoveHoverEffect(btnAdd);
@@ -42,53 +36,28 @@ namespace MusicPlayer
             BindHoverEvents(panelRemove, Color.FromArgb(60, 60, 60), Color.Transparent);
             BindHoverEvents(panelAdd, Color.FromArgb(60, 60, 60), Color.Transparent);
 
-            // 计时器逻辑
-            mouseCheckTimer = new System.Windows.Forms.Timer();
-            mouseCheckTimer.Interval = 50; // 保持灵敏
-            mouseCheckTimer.Tick += (s, e) =>
-            {
-                // 逻辑 A：保护期。
-                if ((DateTime.Now - _startTime).TotalMilliseconds < 1000)
-                {
-                    return;
-                }
-
-                // 逻辑 B：外扩判定。
-                Rectangle detectionArea = this.Bounds;
-                detectionArea.Inflate(50,50);
-
-                if (!detectionArea.Contains(Cursor.Position))
-                {
-                    this.Close();
-                }
-            };
-
-            // 窗体加载时启动计时器
-            this.Load += (s, e) => mouseCheckTimer.Start();
-
-            // 窗体关闭时销毁计时器，释放资源
-            this.FormClosed += (s, e) => {
-                mouseCheckTimer.Stop();
-                mouseCheckTimer.Dispose();
-            };
+            // 标准方案：失去焦点时自动关闭菜单
+            this.Deactivate += (s, e) => this.Close();
         }
 
 
 
         private void BindHoverEvents(Panel p, Color hoverColor, Color defaultColor)
         {
-            // 鼠标进入 Panel 或其子控件时，统一让 Panel 变色
-            EventHandler enter = (s, e) => { p.BackColor = hoverColor; };
-
-            // 鼠标离开时恢复
-            EventHandler leave = (s, e) => { p.BackColor = defaultColor; };
+            EventHandler enter = (s, e) => p.BackColor = hoverColor;
+            EventHandler leave = (s, e) => {
+                // 只有鼠标真的离开 Panel 区域才恢复颜色
+                if (!p.ClientRectangle.Contains(p.PointToClient(Cursor.Position)))
+                {
+                    p.BackColor = defaultColor;
+                }
+            };
 
             p.MouseEnter += enter;
             p.MouseLeave += leave;
 
             foreach (Control c in p.Controls)
             {
-                // 子控件（按钮）进入时，也通知父级变色
                 c.MouseEnter += enter;
                 c.MouseLeave += leave;
             }
@@ -151,9 +120,9 @@ namespace MusicPlayer
         {
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
-            btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            btn.BackColor = Color.Transparent; 
+            // 将鼠标滑过和按下时的颜色设为与按钮背景色相同
+            btn.FlatAppearance.MouseOverBackColor = btn.BackColor;
+            btn.FlatAppearance.MouseDownBackColor = btn.BackColor;
         }
 
         private void RightClickMenu_MouseLeave(object sender, EventArgs e)

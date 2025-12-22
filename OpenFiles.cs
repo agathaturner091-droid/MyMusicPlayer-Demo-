@@ -779,13 +779,12 @@ namespace MusicPlayer
                 contextMenu.StartPosition = FormStartPosition.Manual;
                 contextMenu.Location = Cursor.Position;
 
-                // 添加失去焦点自动关闭的事件，解决菜单不消失的问题
-                contextMenu.Deactivate += (s, ev) =>
-                {
-                    contextMenu.Close();
-                };
+                // 确保点击外部时自动关闭
+                contextMenu.Deactivate += (s, ev) => { contextMenu.Close(); };
 
+                // 并且立即 Activate()，确保它拿到焦点，按钮才能正常响应第一次点击
                 contextMenu.Show();
+                contextMenu.Activate();
             }
         }
 
