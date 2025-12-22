@@ -872,15 +872,19 @@ namespace MusicPlayer
 
         public void ResetToAllMusic()
         {
-            // 恢复 UI 状态：显示搜索图标和添加图标
+            //恢复 UI 状态：显示搜索和添加按钮
             labelAdd.Visible = true;
             labelSearch.Visible = true;
-            panelBackgroundHigh.Visible = true;
 
-            // 清空当前列表（如果你有保存原始路径列表，可以在这里重新加载）
+            // 隐藏所有的背景遮罩（根据你的界面逻辑调整）
+            panelBackgroundHigh.Visible = true; // 或者是 false，看你想要什么初始状态
+
+            // 清空表格，准备显示默认状态
             dataGridViewPlayList.Rows.Clear();
+            dataGridViewPlayList.Visible = false; // 初始状态下隐藏表格，显示 "添加歌曲" 的提示
 
             // 将窗体带到最前
+            this.Show();
             this.BringToFront();
         }
     }

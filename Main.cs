@@ -40,42 +40,20 @@ namespace MusicPlayer
 
         public void CreateNewPlayListUI(string name, List<string> paths)
         {
-            //数据处理：如果歌单已存在则合并，否不存在则新建
+            //数据处理
             if (playListDictionary.ContainsKey(name))
             {
                 playListDictionary[name].AddRange(paths);
                 MessageBox.Show($"已将歌曲添加到现有歌单：{name}");
-                return;
+            }
+            else
+            {
+                playListDictionary.Add(name, paths);
             }
 
-            playListDictionary.Add(name, paths);
-
-            //创建子菜单按钮
-            Button btnItem=new Button();
-            btnItem.Text = "      " + name;
-            btnItem.Size = new Size(panelPlayListSubMenu.Width - 5, 45);
-            btnItem.FlatStyle=FlatStyle.Flat;
-            btnItem.FlatAppearance.BorderSize = 0;
-            btnItem.TextAlign = ContentAlignment.MiddleLeft;
-            btnItem.ForeColor = Color.White;
-            btnItem.Cursor = Cursors.Hand;
-
-            //点击歌名：再OpenFiles的数据表中展示歌曲
-            btnItem.Click += (s, e) =>
-            {
-                //加载属于该歌单的paths
-                _openFiles.LoadPlaylistToGrid(name, playListDictionary[name]);
-            };
-
-            //添加到容器
-            panelPlayListSubMenu.Controls.Add(btnItem);
-
-            //确保是展开状态
-            panelPlayListSubMenu.Visible = true;
+            // 直接调用刷新方法重绘 UI
+            RefreshPlaylists();
         }
-
-        //动态UI生成：在左侧列表创建点击项
-
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
@@ -313,41 +291,48 @@ namespace MusicPlayer
             // 清空旧按钮
             panelPlayListSubMenu.Controls.Clear();
 
-            // 从数据库获取所有歌单名称 (假设你使用的是 SQLiteHelper)
-            List<string> playlists = SQLiteStudio.GetPlaylists();
-
             int buttonHeight = 40; // 每个歌单按钮的高度
 
-            // 3. 动态调整子菜单高度
-            // 如果没有歌单，高度为0；如果有，高度 = 数量 * 40
-            panelPlayListSubMenu.Height = playlists.Count * buttonHeight;
+            panelPlayListSubMenu.Height = playListDictionary.Count * buttonHeight;
 
-            // 4. 倒序添加（保证显示顺序）
-            for (int i = playlists.Count - 1; i >= 0; i--)
+            // 遍历生成按钮
+            foreach (var item in playListDictionary)
             {
+                string playlistName = item.Key;
+                List<string> paths = item.Value;
+
                 Button btn = new Button();
-                btn.Text = playlists[i];
-                btn.Dock = DockStyle.Top;
+                btn.Text = playlistName; //用 Padding 控制
+                btn.Dock = DockStyle.Top; // 自动顶上去
                 btn.Height = buttonHeight;
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.FlatAppearance.BorderSize = 0;
                 btn.TextAlign = ContentAlignment.MiddleLeft;
                 btn.ForeColor = Color.LightGray;
+                btn.Cursor = Cursors.Hand;
 
-                // 设置你要求的字体
                 btn.Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold);
+                btn.Padding = new Padding(70, 0, 0, 0); // 左边距 70
 
-                // 设置你要求的内边距 (Left=70, Top=0, Right=0, Bottom=0)
-                btn.Padding = new Padding(70, 0, 0, 0);
-
-                // 绑定点击事件，点击后在 OpenFiles 中显示该歌单内容
+                // 绑定点击事件
                 btn.Click += (s, e) => {
-                    _openFiles.LoadPlaylistSongs(btn.Text);
+                    // 确保 OpenFiles 显示出来
+                    if (!panelChildForm.Controls.Contains(_openFiles))
+                    {
+                        panelChildForm.Controls.Add(_openFiles);
+                    }
+                    _openFiles.Show();
                     _openFiles.BringToFront();
+
+                    // 调用 OpenFiles 里的方法加载歌曲 (注意方法名是 LoadPlaylistToGrid)
+                    _openFiles.LoadPlaylistToGrid(playlistName, paths);
                 };
 
+                // 添加到子菜单容器
                 panelPlayListSubMenu.Controls.Add(btn);
             }
+
+            panelPlayListSubMenu.Visible = true;
         }
     }
 }
