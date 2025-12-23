@@ -20,25 +20,30 @@ namespace MusicPlayer
 
         private void InitializeDatabase()
         {
-            // 如果数据库文件不存在，SQLiteConnection 打开时会自动创建文件
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
 
-                // 创建 Users 表的 SQL 语句
-                // 对应论文设计：id(主键), username, password, email
-                string sql = @"
-                    CREATE TABLE IF NOT EXISTS Users (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        Username TEXT NOT NULL,
-                        Password TEXT NOT NULL,
-                        Email TEXT NOT NULL
-                    );";
+                // 1. 用户表)
+                string sqlUser = @"CREATE TABLE IF NOT EXISTS Users (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                            username TEXT NOT NULL,
+                            password TEXT NOT NULL,
+                            email TEXT NOT NULL);";
 
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                // 2. 音频资源索引表
+                string sqlMusic = @"CREATE TABLE IF NOT EXISTS MusicTracks (
+                            trackId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            songName TEXT,
+                            artist TEXT,
+                            album TEXT,
+                            duration TEXT,
+                            createTime DATETIME,
+                            filePath TEXT NOT NULL UNIQUE,
+                            fileFormat TEXT);";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
             }
         }
 
@@ -95,6 +100,29 @@ namespace MusicPlayer
 
                     long count = (long)cmd.ExecuteScalar();
                     return count > 0;
+                }
+            }
+        }
+
+        public void SaveTrack(string name, string artist, string album, string duration, string path, string format)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                string sql = @"INSERT OR IGNORE INTO MusicTracks 
+                       (songName, artist, album, duration, createTime, filePath, fileFormat) 
+                       VALUES (@name, @artist, @album, @dur, @time, @path, @fmt)";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@artist", artist);
+                    cmd.Parameters.AddWithValue("@album", album);
+                    cmd.Parameters.AddWithValue("@dur", duration);
+                    cmd.Parameters.AddWithValue("@time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@path", path);
+                    cmd.Parameters.AddWithValue("@fmt", format);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
