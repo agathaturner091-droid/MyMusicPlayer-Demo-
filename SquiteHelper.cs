@@ -61,11 +61,11 @@ namespace MusicPlayer
                 string sqlAudio = @"CREATE TABLE IF NOT EXISTS AudioSettings (
                     settingId INTEGER PRIMARY KEY AUTOINCREMENT,
                     userId INTEGER NOT NULL UNIQUE, 
-                    volume INTEGER DEFAULT 50,
+                    volume INTEGER DEFAULT 100,
                     eqBase REAL DEFAULT 0.0,
                     eqTreble REAL DEFAULT 0.0,
-                    playMode TEXT DEFAULT 'Order',
-                    updateTime DATETIME);";
+                    playMode VARCHAR(20) DEFAULT '0',
+                    updateTime DATETIME)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
@@ -242,7 +242,6 @@ namespace MusicPlayer
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
-                // 使用 INSERT OR REPLACE 处理：如果用户配置已存在则更新，不存在则插入
                 string sql = @"INSERT OR REPLACE INTO AudioSettings (userId, volume, playMode, updateTime) 
                        VALUES (@uid, @vol, @mode, @time)";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -252,6 +251,24 @@ namespace MusicPlayer
                     cmd.Parameters.AddWithValue("@mode", mode);
                     cmd.Parameters.AddWithValue("@time", DateTime.Now);
                     cmd.ExecuteNonQuery();
+                }
+            };
+        }
+        public DataTable GetAudioSettings(int userId)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                 string sql = "SELECT volume, playMode FROM AudioSettings WHERE userId = @uid"; 
+                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt;
+                    }
                 }
             }
         }

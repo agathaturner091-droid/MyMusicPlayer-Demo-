@@ -980,6 +980,38 @@ namespace MusicPlayer
                 btnSearch.Visible = true;
             }
         }
+        public void LoadAudioSettings()
+        {
+            if (mainForm == null) return;
+            SqliteHelper dbHelper = new SqliteHelper();
+            List<string> userFiles = dbHelper.GetUserMusicPaths(Main.CurrentUserId);
+
+            SqliteHelper db = new SqliteHelper();
+            DataTable dt = db.GetAudioSettings(Main.CurrentUserId);
+            if (userFiles.Count > 0)
+            {
+                // 恢复音量
+                int savedVol = Convert.ToInt32(dt.Rows[0]["volume"]);
+                player.settings.volume = savedVol;
+                DrawCustomBar(mainForm.pictureBoxVolumeLoadLine, savedVol / 100.0, Color.White);
+
+                // 恢复播放模式
+                string mode = dt.Rows[0]["playMode"].ToString();
+                this.cycleMode = int.Parse(mode);
+                RefreshModeUI();
+            }
+
+            LoadAudioSettings();
+        }
+        public int GetVolume()
+        {
+            return player.settings.volume;
+        }
+
+        public string GetCycleModeString()
+        {
+            return isRandom ? "Random" : cycleMode.ToString();
+        }
     }
     //音乐信息
     public class MusicInfo

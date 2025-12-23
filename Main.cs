@@ -20,7 +20,7 @@ namespace MusicPlayer
         private AudioEqualizerProcessor _eqProcessor;
         private WaveOutEvent waveOut;
 
-        public static int CurrentUserId;
+        public static int CurrentUserId = 0;
 
         public Main()
         {
@@ -388,6 +388,20 @@ namespace MusicPlayer
             catch (Exception ex)
             {
                 MessageBox.Show("播放失败: " + ex.Message);
+            }
+        }
+        // 在 Main.cs 中
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            OpenFiles of = (OpenFiles)Application.OpenForms["OpenFiles"];
+            if (of != null)
+            {
+                SqliteHelper db = new SqliteHelper();
+                int currentVol = of.GetVolume();
+                string currentMode = of.GetCycleModeString();
+
+                // 执行数据库写入
+                db.SaveAudioSettings(Main.CurrentUserId, currentVol, currentMode);
             }
         }
     }
