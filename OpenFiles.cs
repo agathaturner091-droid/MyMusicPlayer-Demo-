@@ -1003,12 +1003,12 @@ namespace MusicPlayer
 
             LoadAudioSettings();
         }
-        public int GetVolume()
+        public int GetCurrentVolume()
         {
             return player.settings.volume;
         }
 
-        public string GetCycleModeString()
+        public string GetCurrentMode()
         {
             return isRandom ? "Random" : cycleMode.ToString();
         }

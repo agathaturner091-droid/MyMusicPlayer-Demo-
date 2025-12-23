@@ -390,18 +390,18 @@ namespace MusicPlayer
                 MessageBox.Show("播放失败: " + ex.Message);
             }
         }
-        // 在 Main.cs 中
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // 找到 OpenFiles 实例
             OpenFiles of = (OpenFiles)Application.OpenForms["OpenFiles"];
             if (of != null)
             {
                 SqliteHelper db = new SqliteHelper();
-                int currentVol = of.GetVolume();
-                string currentMode = of.GetCycleModeString();
+                // 捕获当前用户的音量和播放模式
+                int vol = of.GetCurrentVolume();
+                string mode = of.GetCurrentMode();
 
-                // 执行数据库写入
-                db.SaveAudioSettings(Main.CurrentUserId, currentVol, currentMode);
+                db.SaveAudioSettings(Main.CurrentUserId, vol, mode);
             }
         }
     }

@@ -239,12 +239,12 @@ namespace MusicPlayer
 
         public void SaveAudioSettings(int userId, int volume, string mode)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            using (System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(connStr))
             {
                 conn.Open();
                 string sql = @"INSERT OR REPLACE INTO AudioSettings (userId, volume, playMode, updateTime) 
                        VALUES (@uid, @vol, @mode, @time)";
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                using (System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@uid", userId);
                     cmd.Parameters.AddWithValue("@vol", volume);
@@ -252,18 +252,18 @@ namespace MusicPlayer
                     cmd.Parameters.AddWithValue("@time", DateTime.Now);
                     cmd.ExecuteNonQuery();
                 }
-            };
+            }
         }
         public DataTable GetAudioSettings(int userId)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            using (System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(connStr))
             {
                 conn.Open();
-                 string sql = "SELECT volume, playMode FROM AudioSettings WHERE userId = @uid"; 
-                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                string sql = "SELECT volume, playMode FROM AudioSettings WHERE userId = @uid";
+                using (System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@uid", userId);
-                    using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                    using (System.Data.SQLite.SQLiteDataAdapter adapter = new System.Data.SQLite.SQLiteDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
