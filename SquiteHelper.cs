@@ -52,9 +52,16 @@ namespace MusicPlayer
                     createTime DATETIME,
                     songCount INTEGER DEFAULT 0);";
 
+                //4、歌单歌曲关联表
+                string sqlMap = @"CREATE TABLE IF NOT EXISTS PlaylistTrackMap (
+                    mapId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    playlistId INTEGER NOT NULL,
+                    trackId INTEGER NOT NULL);";
+
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
-                using (SQLiteCommand cmd = new SQLiteCommand(sqlPlaylist, conn)) { cmd.ExecuteNonQuery(); } // 补上这一行
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlPlaylist, conn)) { cmd.ExecuteNonQuery(); }
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlMap, conn)) { cmd.ExecuteNonQuery(); }
             }
         }
 
@@ -157,21 +164,23 @@ namespace MusicPlayer
             return paths;
         }
 
-        public void CreatePlaylist(string name, int userId)
+        public int CreatePlaylistAndGetId(string name, int userId)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
-                string sql = "INSERT INTO Playlists (userId, playlistName, createTime, songCount) VALUES (@uid, @name, @time, 0)";
+                string sql = "INSERT INTO Playlists (userId, playlistName, createTime, songCount) VALUES (@uid, @name, @time, 0); SELECT last_insert_rowid();";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@uid", userId);
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@time", DateTime.Now);
-                    cmd.ExecuteNonQuery();
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
                 }
             }
         }
+
         public void CreatePlaylist(string name, int userId, int count)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
@@ -186,6 +195,34 @@ namespace MusicPlayer
                     cmd.Parameters.AddWithValue("@time", DateTime.Now);
                     cmd.Parameters.AddWithValue("@count", count); // 歌曲总数
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void AddTrackToPlaylist(int playlistId, int trackId)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                string sql = "INSERT INTO PlaylistTrackMap (playlistId, trackId) VALUES (@pid, @tid)";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@pid", playlistId);
+                    cmd.Parameters.AddWithValue("@tid", trackId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public int GetTrackIdByPath(string path)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                string sql = "SELECT trackId FROM MusicTracks WHERE filePath = @path";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@path", path);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
                 }
             }
         }

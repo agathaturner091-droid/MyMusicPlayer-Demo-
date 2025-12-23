@@ -33,11 +33,27 @@ namespace MusicPlayer
             }
 
             SqliteHelper db = new SqliteHelper();
-            int songCount = _tempPaths != null ? _tempPaths.Count : 0;
 
-            db.CreatePlaylist(newName, Main.CurrentUserId, songCount);
-            // ------------------------------------
+            // 1. 创建歌单并拿到 ID（只调用这一次！）
+            int newPid = db.CreatePlaylistAndGetId(newName, Main.CurrentUserId);
 
+            if (newPid > 0)
+            {
+                // 2. 循环将歌曲路径转换成 ID 并存入映射表
+                foreach (string path in _tempPaths)
+                {
+                    int tid = db.GetTrackIdByPath(path);
+                    if (tid > 0)
+                    {
+                        db.AddTrackToPlaylist(newPid, tid);
+                    }
+                }
+
+                // 3. 统计选中的数量，更新这个歌单的总数
+                int songCount = _tempPaths != null ? _tempPaths.Count : 0;
+            }
+
+            // 4. 更新 UI 逻辑保持不变
             if (_openFiles.Tag is Main main)
             {
                 main.CreateNewPlayListUI(newName, _tempPaths);
