@@ -58,10 +58,20 @@ namespace MusicPlayer
                     playlistId INTEGER NOT NULL,
                     trackId INTEGER NOT NULL);";
 
+                string sqlAudio = @"CREATE TABLE IF NOT EXISTS AudioSettings (
+                    settingId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    userId INTEGER NOT NULL UNIQUE, 
+                    volume INTEGER DEFAULT 50,
+                    eqBase REAL DEFAULT 0.0,
+                    eqTreble REAL DEFAULT 0.0,
+                    playMode TEXT DEFAULT 'Order',
+                    updateTime DATETIME);";
+
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlPlaylist, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMap, conn)) { cmd.ExecuteNonQuery(); }
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlAudio, conn)) { cmd.ExecuteNonQuery(); }
             }
         }
 
@@ -223,6 +233,25 @@ namespace MusicPlayer
                     cmd.Parameters.AddWithValue("@path", path);
                     object result = cmd.ExecuteScalar();
                     return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
+        public void SaveAudioSettings(int userId, int volume, string mode)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                // 使用 INSERT OR REPLACE 处理：如果用户配置已存在则更新，不存在则插入
+                string sql = @"INSERT OR REPLACE INTO AudioSettings (userId, volume, playMode, updateTime) 
+                       VALUES (@uid, @vol, @mode, @time)";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    cmd.Parameters.AddWithValue("@vol", volume);
+                    cmd.Parameters.AddWithValue("@mode", mode);
+                    cmd.Parameters.AddWithValue("@time", DateTime.Now);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
