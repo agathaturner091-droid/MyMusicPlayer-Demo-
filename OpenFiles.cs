@@ -352,6 +352,9 @@ namespace MusicPlayer
         }
         private void SearchMusic(string path)
         {
+            SqliteHelper dbHelper = new SqliteHelper();
+            int currentId = MusicPlayer.Main.CurrentUserId;
+
             try
             {
                 // 搜索的音频格式
@@ -372,6 +375,33 @@ namespace MusicPlayer
                     labelAdd.Visible = true;
                     labelSearch.Visible = true;
                     return;
+                }
+
+                foreach (var file in files)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+                    string extension = Path.GetExtension(file);
+
+                    // 预设默认值
+                    string artist = "未知歌手";
+                    string album = "未知专辑";
+                    string duration = "00:00";
+
+                    // 使用代码里已有的 TagLib 尝试获取真实属性
+                    try
+                    {
+                        using (var tfile = TagLib.File.Create(file))
+                        {
+                            artist = string.Join(",", tfile.Tag.Performers);
+                            if (string.IsNullOrEmpty(artist)) artist = "未知歌手";
+                            album = tfile.Tag.Album ?? "未知专辑";
+                            duration = tfile.Properties.Duration.ToString(@"mm\:ss");
+                        }
+                    }
+                    catch { /* 忽略读取失败的文件，使用默认值 */ }
+
+                    // 执行数据库保存
+                    dbHelper.SaveTrack(fileName, artist, album, duration, file, extension, currentId);
                 }
 
                 // 切换 UI 状态
@@ -927,6 +957,27 @@ namespace MusicPlayer
             catch
             {
                 dataGridViewPlayList.Rows.Add(count++, Path.GetFileNameWithoutExtension(file), "未知专辑", "", "00:00", file);
+            }
+        }
+
+        public void AutoLoadUserMusic()
+        {
+            if (mainForm == null) return;
+
+            SqliteHelper dbHelper = new SqliteHelper();
+            List<string> userFiles = dbHelper.GetUserMusicPaths(Main.CurrentUserId);
+
+            if (userFiles.Count > 0)
+            {
+                this._allLocalMusicCache = new List<string>(userFiles);
+
+                this.LoadPlaylistToGrid("我的库", userFiles);
+
+                labelAdd.Visible = false;
+                labelSearch.Visible = false;
+                dataGridViewPlayList.Visible = true;
+                panelSecondBackgroundHigh.Visible = true;
+                btnSearch.Visible = true;
             }
         }
     }

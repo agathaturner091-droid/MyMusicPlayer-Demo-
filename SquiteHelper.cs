@@ -34,13 +34,14 @@ namespace MusicPlayer
                 // 2. 音频资源索引表
                 string sqlMusic = @"CREATE TABLE IF NOT EXISTS MusicTracks (
                             trackId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            userId INTEGER,
                             songName TEXT,
                             artist TEXT,
                             album TEXT,
-                            duration TEXT,
+                            duration TEXT NOT NULL,
                             createTime DATETIME,
                             filePath TEXT NOT NULL UNIQUE,
-                            fileFormat TEXT);";
+                            fileFormat TEXT NOT NULL);";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
@@ -104,27 +105,50 @@ namespace MusicPlayer
             }
         }
 
-        public void SaveTrack(string name, string artist, string album, string duration, string path, string format)
+        public void SaveTrack(string name, string artist, string album, string duration, string path, string format, int userId)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
-                string sql = @"INSERT OR IGNORE INTO MusicTracks 
-                       (songName, artist, album, duration, createTime, filePath, fileFormat) 
-                       VALUES (@name, @artist, @album, @dur, @time, @path, @fmt)";
+                string sql = "INSERT INTO MusicTracks (userId, songName, artist, album, duration, filePath, fileFormat, createTime) " +
+                             "VALUES (@uid, @name, @artist, @album, @duration, @path, @format, @time)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
+                    cmd.Parameters.AddWithValue("@uid", userId); // 绑定当前用户ID
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@artist", artist);
                     cmd.Parameters.AddWithValue("@album", album);
-                    cmd.Parameters.AddWithValue("@dur", duration);
-                    cmd.Parameters.AddWithValue("@time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@duration", duration);
                     cmd.Parameters.AddWithValue("@path", path);
-                    cmd.Parameters.AddWithValue("@fmt", format);
+                    cmd.Parameters.AddWithValue("@format", format);
+                    cmd.Parameters.AddWithValue("@time", DateTime.Now);
+
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public List<string> GetUserMusicPaths(int userId)
+        {
+            List<string> paths = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                string sql = "SELECT filePath FROM MusicTracks WHERE userId = @uid";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            paths.Add(reader["filePath"].ToString());
+                        }
+                    }
+                }
+            }
+            return paths;
         }
     }
 }

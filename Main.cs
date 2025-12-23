@@ -18,7 +18,9 @@ namespace MusicPlayer
 
         private AudioFileReader audioFile;
         private AudioEqualizerProcessor _eqProcessor;
-        private WaveOutEvent waveOut; 
+        private WaveOutEvent waveOut;
+
+        public static int CurrentUserId;
 
         public Main()
         {
