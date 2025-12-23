@@ -353,7 +353,7 @@ namespace MusicPlayer
         private void SearchMusic(string path)
         {
             SqliteHelper dbHelper = new SqliteHelper();
-            int currentId = MusicPlayer.Main.CurrentUserId;
+            int currentId = Main.CurrentUserId;
 
             try
             {
@@ -401,7 +401,7 @@ namespace MusicPlayer
                     catch { /* 忽略读取失败的文件，使用默认值 */ }
 
                     // 执行数据库保存
-                    dbHelper.SaveTrack(fileName, artist, album, duration, file, extension, currentId);
+                    dbHelper.SaveTrack(fileName, artist, album, duration, file, Path.GetExtension(file), currentId);
                 }
 
                 // 切换 UI 状态

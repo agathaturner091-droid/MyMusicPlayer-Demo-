@@ -46,20 +46,24 @@ namespace MusicPlayer
             }
 
             SqliteHelper db = new SqliteHelper();
-            if (db.CheckLogin(accountInput, pwdInput))
+            int loggedInId = db.GetUserIdAfterLogin(accountInput, pwdInput);
+
+            if (loggedInId > 0)
             {
-                MessageBox.Show("登录成功，欢迎使用MeloVibe！");
+                Main.CurrentUserId = loggedInId;
+
+                MessageBox.Show("登录成功！");
 
                 Form parentForm = this.FindForm();
                 if (parentForm != null)
                 {
-                    parentForm.DialogResult= DialogResult.OK;
+                    parentForm.DialogResult = DialogResult.OK;
                     parentForm.Close();
                 }
             }
             else
             {
-                MessageBox.Show("账户或密码错误，请重试！");
+                MessageBox.Show("账户或密码错误！");
             }
         }
     }

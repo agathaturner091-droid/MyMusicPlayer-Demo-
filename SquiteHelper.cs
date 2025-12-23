@@ -85,22 +85,18 @@ namespace MusicPlayer
             }
         }
 
-        public bool CheckLogin(string identifier, string pwd)
+        public int GetUserIdAfterLogin(string account, string pwd)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
-
-                // 支持用“用户名”或“邮箱”登录
-                string sql = "SELECT COUNT(*) FROM Users WHERE (username = @id OR email = @id) AND password = @pwd";
-
+                string sql = "SELECT id FROM Users WHERE username = @user AND password = @pwd";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@id", identifier);
+                    cmd.Parameters.AddWithValue("@user", account);
                     cmd.Parameters.AddWithValue("@pwd", pwd);
-
-                    long count = (long)cmd.ExecuteScalar();
-                    return count > 0;
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
                 }
             }
         }
@@ -110,8 +106,8 @@ namespace MusicPlayer
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 conn.Open();
-                string sql = "INSERT INTO MusicTracks (userId, songName, artist, album, duration, filePath, fileFormat, createTime) " +
-                             "VALUES (@uid, @name, @artist, @album, @duration, @path, @format, @time)";
+                string sql = "INSERT OR IGNORE INTO MusicTracks (userId, songName, artist, album, duration, filePath, fileFormat, createTime) " +
+                                    "VALUES (@uid, @name, @artist, @album, @duration, @path, @format, @time)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                 {
