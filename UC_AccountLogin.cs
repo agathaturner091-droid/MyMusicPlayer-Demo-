@@ -50,15 +50,24 @@ namespace MusicPlayer
 
             if (loggedInId > 0)
             {
+                // 1. 成功赋值
                 Main.CurrentUserId = loggedInId;
 
                 MessageBox.Show("登录成功！");
 
+                // 2. 关键：尝试获取当前已经存在的 OpenFiles 窗体实例并加载设置
+                OpenFiles of = (OpenFiles)Application.OpenForms["OpenFiles"];
+                if (of != null)
+                {
+                    of.AutoLoadUserMusic(); // 这会触发 LoadAudioSettings() 弹窗
+                }
+
+                // 3. 处理关闭登录窗口的逻辑
                 Form parentForm = this.FindForm();
                 if (parentForm != null)
                 {
-                    parentForm.DialogResult = DialogResult.OK;
-                    parentForm.Close();
+                    parentForm.DialogResult = DialogResult.OK; // 告诉主窗口登录成功
+                    parentForm.Close(); // 关闭登录对话框
                 }
             }
             else

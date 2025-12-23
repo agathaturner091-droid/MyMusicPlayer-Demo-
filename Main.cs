@@ -29,6 +29,8 @@ namespace MusicPlayer
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
+            this.FormClosing += Main_FormClosing;
+
             //初始化窗体
             _openFiles = new OpenFiles(this);
             _openFiles.TopLevel = false;
@@ -392,16 +394,20 @@ namespace MusicPlayer
         }
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // 找到 OpenFiles 实例
             OpenFiles of = (OpenFiles)Application.OpenForms["OpenFiles"];
             if (of != null)
             {
                 SqliteHelper db = new SqliteHelper();
-                // 捕获当前用户的音量和播放模式
+
                 int vol = of.GetCurrentVolume();
                 string mode = of.GetCurrentMode();
 
-                db.SaveAudioSettings(Main.CurrentUserId, vol, mode);
+                // 假设：取均衡器第1频段为低音，第10频段为高音
+                float baseVal = currentEqGains[0];
+                float trebleVal = currentEqGains[9];
+
+                db.SaveAudioSettings(Main.CurrentUserId, vol, mode, baseVal, trebleVal);
+
             }
         }
     }

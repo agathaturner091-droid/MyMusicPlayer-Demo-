@@ -237,18 +237,20 @@ namespace MusicPlayer
             }
         }
 
-        public void SaveAudioSettings(int userId, int volume, string mode)
+        public void SaveAudioSettings(int userId, int volume, string mode, float baseGain, float trebleGain)
         {
             using (System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(connStr))
             {
                 conn.Open();
-                string sql = @"INSERT OR REPLACE INTO AudioSettings (userId, volume, playMode, updateTime) 
-                       VALUES (@uid, @vol, @mode, @time)";
+                string sql = @"INSERT OR REPLACE INTO AudioSettings (userId, volume, playMode, eqBase, eqTreble, updateTime) 
+                       VALUES (@uid, @vol, @mode, @base, @treble, @time)";
                 using (System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@uid", userId);
                     cmd.Parameters.AddWithValue("@vol", volume);
                     cmd.Parameters.AddWithValue("@mode", mode);
+                    cmd.Parameters.AddWithValue("@base", baseGain);
+                    cmd.Parameters.AddWithValue("@treble", trebleGain);
                     cmd.Parameters.AddWithValue("@time", DateTime.Now);
                     cmd.ExecuteNonQuery();
                 }

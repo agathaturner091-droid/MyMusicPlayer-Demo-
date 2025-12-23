@@ -979,29 +979,41 @@ namespace MusicPlayer
                 panelSecondBackgroundHigh.Visible = true;
                 btnSearch.Visible = true;
             }
+
+            LoadAudioSettings();
         }
         public void LoadAudioSettings()
         {
-            if (mainForm == null) return;
-            SqliteHelper dbHelper = new SqliteHelper();
-            List<string> userFiles = dbHelper.GetUserMusicPaths(Main.CurrentUserId);
+            MessageBox.Show("正在读取用户：" + Main.CurrentUserId);
 
             SqliteHelper db = new SqliteHelper();
             DataTable dt = db.GetAudioSettings(Main.CurrentUserId);
-            if (userFiles.Count > 0)
+            if (dt.Rows.Count > 0)
             {
                 // 恢复音量
                 int savedVol = Convert.ToInt32(dt.Rows[0]["volume"]);
                 player.settings.volume = savedVol;
+
+                // 必须通过 mainForm 找到对应的 PictureBox 来重绘音量条
                 DrawCustomBar(mainForm.pictureBoxVolumeLoadLine, savedVol / 100.0, Color.White);
 
                 // 恢复播放模式
                 string mode = dt.Rows[0]["playMode"].ToString();
-                this.cycleMode = int.Parse(mode);
+
+                // 如果你存的是 "Random"，需要特殊处理
+                if (mode == "Random")
+                {
+                    this.isRandom = true;
+                }
+                else
+                {
+                    this.isRandom = false;
+                    this.cycleMode = int.Parse(mode);
+                }
+
+                // 刷新 UI 图标（比如循环按钮变色）
                 RefreshModeUI();
             }
-
-            LoadAudioSettings();
         }
         public int GetCurrentVolume()
         {
