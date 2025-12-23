@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MusicPlayer
@@ -24,27 +25,36 @@ namespace MusicPlayer
             {
                 conn.Open();
 
-                // 1. 用户表)
+                // 1. 用户表语句
                 string sqlUser = @"CREATE TABLE IF NOT EXISTS Users (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                            username TEXT NOT NULL,
-                            password TEXT NOT NULL,
-                            email TEXT NOT NULL);";
+                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    username TEXT NOT NULL,
+                    password TEXT NOT NULL,
+                    email TEXT NOT NULL);";
 
-                // 2. 音频资源索引表
+                // 2. 歌曲表语句
                 string sqlMusic = @"CREATE TABLE IF NOT EXISTS MusicTracks (
-                            trackId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            userId INTEGER,
-                            songName TEXT,
-                            artist TEXT,
-                            album TEXT,
-                            duration TEXT NOT NULL,
-                            createTime DATETIME,
-                            filePath TEXT NOT NULL UNIQUE,
-                            fileFormat TEXT NOT NULL);";
+                    trackId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    userId INTEGER,
+                    songName TEXT,
+                    artist TEXT,
+                    album TEXT,
+                    duration TEXT NOT NULL,
+                    createTime DATETIME,
+                    filePath TEXT NOT NULL UNIQUE,
+                    fileFormat TEXT NOT NULL);";
+
+                // 3. 歌单表语句
+                string sqlPlaylist = @"CREATE TABLE IF NOT EXISTS Playlists (
+                    playlistId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    userId INTEGER NOT NULL,
+                    playlistName TEXT NOT NULL,
+                    createTime DATETIME,
+                    songCount INTEGER DEFAULT 0);";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlUser, conn)) { cmd.ExecuteNonQuery(); }
                 using (SQLiteCommand cmd = new SQLiteCommand(sqlMusic, conn)) { cmd.ExecuteNonQuery(); }
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlPlaylist, conn)) { cmd.ExecuteNonQuery(); } // 补上这一行
             }
         }
 
@@ -145,6 +155,39 @@ namespace MusicPlayer
                 }
             }
             return paths;
+        }
+
+        public void CreatePlaylist(string name, int userId)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                string sql = "INSERT INTO Playlists (userId, playlistName, createTime, songCount) VALUES (@uid, @name, @time, 0)";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@time", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void CreatePlaylist(string name, int userId, int count)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connStr))
+            {
+                conn.Open();
+                // 插入歌单基本信息
+                string sql = "INSERT INTO Playlists (userId, playlistName, createTime, songCount) VALUES (@uid, @name, @time, @count)";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@time", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@count", count); // 歌曲总数
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -135,8 +135,6 @@ namespace MusicPlayer
             EditDetails editForm = new EditDetails(_paths, _parent);
             //等用户操作完再继续
             editForm.ShowDialog();
-
-            this.Close();
         }
         void RemoveHoverEffect(Button btn)
         {

@@ -32,7 +32,12 @@ namespace MusicPlayer
                 return;
             }
 
-            //找到Main界面，并调用方法
+            SqliteHelper db = new SqliteHelper();
+            int songCount = _tempPaths != null ? _tempPaths.Count : 0;
+
+            db.CreatePlaylist(newName, Main.CurrentUserId, songCount);
+            // ------------------------------------
+
             if (_openFiles.Tag is Main main)
             {
                 main.CreateNewPlayListUI(newName, _tempPaths);
@@ -40,7 +45,6 @@ namespace MusicPlayer
             }
             else
             {
-                //如果Tag没设，尝试通过ParentForm找
                 Main m = (Main)Application.OpenForms["Main"];
                 m?.CreateNewPlayListUI(newName, _tempPaths);
                 this.Close();
